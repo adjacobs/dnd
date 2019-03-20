@@ -46,14 +46,6 @@ class Player(Characters):
         self.spells=[]
         self.charClass=[]
         self.abilities=[]
-        self.stats=[self.str=Stat(), self.dex=Stat(), self.con,
-                    self.int, self.wis, self.cha]
-        
-        self.skills=[self.actobatics, self.animalHandling, self.arcana, self.athletics,
-                    self.deception, self.history, self.insight, self.intimidation,
-                    self.investigation, self.medicine, self.nature, self.perception,
-                    self.performance, self.persuasion, self.religion, self.slightOfHand,
-                    self.stealth, self.survival]
         
         self.jsonFile=r'C:\Users\ajacobs\Desktop\DnD\export.json'
     
@@ -61,9 +53,16 @@ class Player(Characters):
         
     def _buildStatClassList(self):
         '''Creates a Stat instance for each of the base stats.'''
-        for stat in self.stats:
-            stat=Stat()
-    
+        self.str=Stat('Strength')
+        self.dex=Stat('Dextarity')
+        self.con=Stat('Constitution')
+        self.int=Stat('Intelegence')
+        self.wis=Stat('Wisdonm')
+        self.cha=Stat('Charisma')
+        
+        self.stats=[self.str, self.dex, self.con,
+                    self.int, self.wis, self.cha]
+        
     def _buildSkillClassList(self):
         pass 
     def setLvl(self, lvl):
@@ -144,7 +143,8 @@ class Player(Characters):
         
 
 class Stat():
-    def __init__(self):
+    def __init__(self, name):
+        self.name=name
         self.value=0
         self.prof=False
     

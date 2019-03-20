@@ -2,8 +2,8 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
 #Import of UI elemenets
-from dnd.UI.stats import StatWidget
-from dnd.UI.skills import SkillWidget
+from dnd.ui_pyside.stats import StatWidget
+from dnd.ui_pyside.skills import SkillWidget
 
 class UI(QtWidgets.QMainWindow):
     def __init__(self, playerEngine):

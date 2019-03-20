@@ -6,9 +6,9 @@ Created on Mar 13, 2019
 import sys
 from PySide2 import QtWidgets
 
-from dnd.UI.main import UI
+from dnd.ui_pyside.main import UI
 
-from dnd.player import Player
+from dnd.engine.player import Player
 
 class LaunchUI(UI):
     def __init__(self):
