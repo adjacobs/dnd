@@ -3,20 +3,30 @@ Created on Mar 8, 2019
 
 @author: ajacobs
 '''
+from PySide2 import QtCore, QtGui, QtWidgets
 
-from PySide2 import QtWidgets
-
-
-class SectionLayout(QtWidgets.QVBoxLayout):
-    def __init__(self):
-        super(SectionLayout, self).__init__()
-        self.setSpacing(0)
-
-'''Framed wiget to be called by all sections. Allowing for universal changes to framed out sections'''   
-class SectionFrame(QtWidgets.QFrame): 
-    def __init__(self):
-        super(SectionFrame, self).__init__()
-        self.layout=SectionLayout()
-        self.setLineWidth(1)
-        self.setFrameStyle(QtWidgets.QFrame.Box|QtWidgets.QFrame.Sunken)  
-        self.setLayout(self.layout)  
+class VFrameWidget(QtWidgets.QFrame):
+    def __init__(self, name):
+        super(VFrameWidget, self).__init__()
+        
+        self.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.setFrameShape(QtWidgets.QFrame.Panel)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.setObjectName(name)
+        
+        #Setting layout that frame uses
+        self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.setObjectName("VLayout")
+        
+class HFrameWidget(QtWidgets.QFrame):
+    def __init__(self, name):
+        super(HFrameWidget, self).__init__()
+        
+        self.setGeometry(QtCore.QRect(0, 0, 0, 0))
+        self.setFrameShape(QtWidgets.QFrame.Panel)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.setObjectName(name)
+        
+        #Setting layout that frame uses
+        self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.setObjectName("HLayout")

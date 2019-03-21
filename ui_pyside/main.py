@@ -3,8 +3,11 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
 #Import of UI elemenets
-from dnd.ui_pyside.stats import StatWidget
+from dnd.ui_pyside.stats import StatsWidget
 from dnd.ui_pyside.skills import SkillWidget
+from dnd.ui_pyside.util import VFrameWidget, HFrameWidget
+
+from PySide2.QtWidgets import QWidget
 
 class UI(QtWidgets.QMainWindow):
     def __init__(self, playerEngine):
@@ -22,9 +25,11 @@ class UI(QtWidgets.QMainWindow):
         self.setCentralWidget(self.centralwidget)
         
         #Sets up central widget layout for central widget that all UI elements will be added to
-        self.centralGLayout = QtWidgets.QHBoxLayout(self.centralwidget)
-        self.centralGLayout.setObjectName("centralGLayout")
+        self.centralVLayout = QtWidgets.QVBoxLayout(self.centralwidget)
+        self.centralVLayout.setObjectName("centralGLayout")
         
+        
+        '''Menu stuff. Not needed for a bit.
         #Set up menu par paramaters
         self.menubar = QtWidgets.QMenuBar(self)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 836, 21))
@@ -48,36 +53,64 @@ class UI(QtWidgets.QMainWindow):
         
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
+        '''
         
         #Adding UI elements
-        self.addStats()
-        self.addSkills()
+        self.setBannerLayout()
+        self.setChracterLayout()
+        #self.addSkills()
         
     def retranslateUi(self):
         self.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "DnDWindow", None, -1))
         self.dropDownMenu.setTitle(QtWidgets.QApplication.translate("MainWindow", "dropDownMenu", None, 1))
         self.dropDownMenuItem.setText(QtWidgets.QApplication.translate("MainWindow", "dropDownMenuItem", None, -1))
-        
-    def addStats(self):
-        '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
+    
+    '''Sets up title widget and layout'''
+    def setBannerLayout(self):
         #Setting up frame pramaters
-        self.statsFrame = QtWidgets.QFrame(self.centralwidget)
-        self.statsFrame.setGeometry(QtCore.QRect(260, 50, 184, 641))
-        self.statsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.statsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.statsFrame.setObjectName("statsFrame")
+        self.bannerFrame = HFrameWidget('Banner')
+        self.bannerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.bannerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         
         #Adding frame to central layout
-        self.centralGLayout.addWidget(self.statsFrame)
+        self.centralVLayout.addWidget(self.bannerFrame)        
         
-        #Setting frame layout for stat widgets to be added to
-        self.statsFrameVLayout = QtWidgets.QVBoxLayout(self.statsFrame)
-        self.statsFrameVLayout.setObjectName("statsFrameVLayout")
+        self.avatarLayout=HFrameWidget('avatar')
+        self.chrInfoLayout=HFrameWidget('info')
         
-        #Go through the player stats and build out a frame widget for each
-        #Passing in "self" so stat widgets can all refresh together
-        for stat in self.Player.getStats():
-            self.statsFrameVLayout.addWidget(StatWidget(stat, self))
+        self.bannerFrame.layout.addWidget(self.avatarLayout)
+        self.bannerFrame.layout.addWidget(self.chrInfoLayout)
+        
+    def setChracterLayout(self):
+        #Setting up frame pramaters
+        self.characterFrame = HFrameWidget('character')
+        self.characterFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.characterFrame.setFrameShadow(QtWidgets.QFrame.Raised)
+        
+        #Adding frame to central layout
+        self.centralVLayout.addWidget(self.characterFrame)        
+        
+        self.statsWidget=StatsWidget(self.Player, self)
+        self.chrOverviewWidget=VFrameWidget('overview')
+        
+        self.characterFrame.layout.addWidget(self.statsWidget)
+        self.characterFrame.layout.addWidget(self.chrOverviewWidget)
+        
+        self.setCharacterDetailsLayout()
+        
+    def setCharacterDetailsLayout(self):
+        self.characteSpecs=HFrameWidget('Specs')
+        
+        self.characterDetailsFrame=HFrameWidget('details')
+        self.characterEquipmentFrame=HFrameWidget('equipment')
+        
+        self.chracterMenu=HFrameWidget('menu')
+        
+        self.chrOverviewWidget.layout.addWidget(self.characteSpecs)
+        self.chrOverviewWidget.layout.addWidget(self.chracterMenu)
+        
+        self.characteSpecs.layout.addWidget(self.characterDetailsFrame)
+        self.characteSpecs.layout.addWidget(self.characterEquipmentFrame)
     
     def addSkills(self):
         '''Builds Frame for skills widgets to get added to and adds the frame to the central widget'''
@@ -89,7 +122,7 @@ class UI(QtWidgets.QMainWindow):
         self.skillsFrame.setObjectName("skillsFrame")
         
         #Adding frame to central layout
-        self.centralGLayout.addWidget(self.skillsFrame)
+        self.centralVLayout.addWidget(self.skillsFrame)
         
         #Setting frame layout for skills to be added to
         self.skillsFrameVLayout = QtWidgets.QVBoxLayout(self.skillsFrame)

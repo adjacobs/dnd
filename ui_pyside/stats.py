@@ -5,6 +5,28 @@ Created on Mar 8, 2019
 '''
 from PySide2 import QtCore, QtGui, QtWidgets
 
+class StatsWidget(QtWidgets.QFrame):
+    def __init__(self, Player, Parent):
+        super(StatsWidget, self).__init__()
+        
+        '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
+        #Setting up frame pramaters
+        self.setGeometry(QtCore.QRect(260, 50, 184, 641))
+        self.setFrameShape(QtWidgets.QFrame.Panel)
+        self.setFrameShadow(QtWidgets.QFrame.Plain)
+        self.setObjectName("statsFrame")
+        
+        self.setMaximumWidth(100)
+        
+        #Setting frame layout for stat widgets to be added to
+        self.statsFrameVLayout = QtWidgets.QVBoxLayout(self)
+        self.statsFrameVLayout.setObjectName("statsFrameVLayout")
+        
+        #Go through the player stats and build out a frame widget for each
+        #Passing in "self" so stat widgets can all refresh together
+        for stat in Player.getStats():
+            self.statsFrameVLayout.addWidget(StatWidget(stat, Parent))
+
 class StatWidget(QtWidgets.QFrame):
     def __init__(self, stat, parent):
         super(StatWidget, self).__init__()
@@ -12,10 +34,12 @@ class StatWidget(QtWidgets.QFrame):
         self.Parent=parent
         
         #Setting paramaters for QFrame inherited class
-        self.setGeometry(QtCore.QRect(420, 140, 164, 744))
+        self.setGeometry(QtCore.QRect(50, 50, 50, 50))
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.setObjectName("statFrame")
+        
+        
         
         #Setting layout that frame uses
         self.statFrameVLayout = QtWidgets.QVBoxLayout(self)
