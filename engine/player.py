@@ -9,7 +9,7 @@ class Characters():
     def __init__(self):
         self.name=''
         self.race=''
-        self.armorClass=''
+        self.armorClass=0
     
     def setName(self, name):
         '''Sets name of Person.'''
@@ -28,6 +28,7 @@ class Characters():
     def setArmorClass(self, armorClass):
         '''Sets armor class.'''
         self.armorClass=armorClass
+    
     def getArmorClass(self):
         '''Returns armor class.'''
         return self.armorClass
@@ -50,6 +51,7 @@ class Player(Characters):
         self.jsonFile=r'C:\Users\ajacobs\Desktop\DnD\export.json'
     
         self._buildStatClassList()
+        self._buildSkillClassList()
         
     def _buildStatClassList(self):
         '''Creates a Stat instance for each of the base stats.'''
@@ -57,14 +59,42 @@ class Player(Characters):
         self.dex=Stat('Dextarity')
         self.con=Stat('Constitution')
         self.int=Stat('Intelegence')
-        self.wis=Stat('Wisdonm')
+        self.wis=Stat('Wisdom')
         self.cha=Stat('Charisma')
-        
-        self.stats=[self.str, self.dex, self.con,
-                    self.int, self.wis, self.cha]
+    
+    def getStats(self):
+        '''Retunrs a list of all the player stats.'''
+        return [self.str, self.dex, self.con,
+                self.int, self.wis, self.cha]
         
     def _buildSkillClassList(self):
-        pass 
+        self.actobatics=Skill('Acrobatics', self.dex)
+        self.animalHandling=Skill('Animal Handling', self.wis)
+        self.arcana=Skill('Arcana', self.int)
+        self.athletics=Skill('Athletics', self.str)
+        self.deception=Skill('Deception', self.cha)
+        self.history=Skill('History', self.int)
+        self.insight=Skill('Insight', self.wis)
+        self.intimidation=Skill('Intimidation', self.cha)
+        self.investigation=Skill('Investigation', self.int)
+        self.medicine=Skill('Medicine', self.wis)
+        self.nature=Skill('Nature', self.int)
+        self.perception=Skill('Perceptpion', self.wis)
+        self.performance=Skill('Performance', self.cha)
+        self.persuasion=Skill('Persuasuion', self.cha)
+        self.religion=Skill('Religion', self.int)
+        self.slightOfHand=Skill('Slight of Hand', self.dex)
+        self.stealth=Skill('Stealth',self.dex)
+        self.survival=Skill('Survival', self.wis)
+    
+    def getSkills(self):
+        '''Returns a list of all the player skills.'''
+        return [self.actobatics, self.animalHandling, self.arcana, self.athletics,
+                self.deception, self.history, self.insight, self.intimidation,
+                self.investigation, self.medicine, self.nature, self.perception,
+                self.performance, self.persuasion, self.religion, self.slightOfHand,
+                self.stealth, self.survival]
+        
     def setLvl(self, lvl):
         self.level=lvl
     
@@ -148,6 +178,12 @@ class Stat():
         self.value=0
         self.prof=False
     
+    def getName(self, long=False):
+        '''returns name'''
+        if long:
+            return self.name
+        return self.name[:3]
+    
     def set(self, val):
         '''sets stat value'''
         self.value=int(val)
@@ -183,11 +219,21 @@ class Stat():
 
 '''Container for skills. Takes in the corresponding stat in order to return proper values.'''
 class Skill():
-    def __init__(self, Stat):
+    def __init__(self, name, Stat):
+        self.name=name
         self.Stat=Stat
         self.prof=False
         self.expert=False
-        
+    
+    def getModifier(self):
+        return self.Stat.getModifier()
+    
+    def getName(self, stat=False):
+        '''Returns name of skill. If stat true includes abriviated control stat'''
+        if stat:
+            return self.name + ' (%s)'%self.Stat.getName(long=False)
+        return self.name
+    
     def setProf(self, prof):
         '''Sets if skill is proficient'''
         self.prof=prof

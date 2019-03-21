@@ -1,4 +1,5 @@
 
+
 from PySide2 import QtCore, QtGui, QtWidgets
 
 #Import of UI elemenets
@@ -73,7 +74,9 @@ class UI(QtWidgets.QMainWindow):
         self.statsFrameVLayout = QtWidgets.QVBoxLayout(self.statsFrame)
         self.statsFrameVLayout.setObjectName("statsFrameVLayout")
         
-        for stat in self.Player.stats:
+        #Go through the player stats and build out a frame widget for each
+        #Passing in "self" so stat widgets can all refresh together
+        for stat in self.Player.getStats():
             self.statsFrameVLayout.addWidget(StatWidget(stat, self))
     
     def addSkills(self):
@@ -92,10 +95,13 @@ class UI(QtWidgets.QMainWindow):
         self.skillsFrameVLayout = QtWidgets.QVBoxLayout(self.skillsFrame)
         self.skillsFrameVLayout.setObjectName("statsFrameVLayout")
         
-        skills=['Athletics (Str)', 'Acrobatics (Dex)', 'Poison (Con)','Arcana (Int)', 'Animal Handling (Wis)', 'Deception (Cha)']
-        
-        for s in skills:
-            self.skillsFrameVLayout.addWidget(SkillWidget(s))
+        #Go through the player skills and build out a frame widget for each
+        #Passing in "self" so stat widgets can all refresh together
+        for skill in self.Player.getSkills():
+            widget=SkillWidget(skill, self)
+            self.skillsFrameVLayout.addWidget(widget)
     
-    def testFunction(self):
-        print ('testFunction working')
+    def refreshUI(self):
+        print('111111111111111')
+        for i in range(self.skillsFrameVLayout.count()):
+            self.skillsFrameVLayout.itemAt(i).lineWidth(50)

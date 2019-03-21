@@ -4,8 +4,6 @@ Created on Mar 8, 2019
 @author: ajacobs
 '''
 from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtGui import QIntValidator
-
 
 class StatWidget(QtWidgets.QFrame):
     def __init__(self, stat, parent):
@@ -32,7 +30,7 @@ class StatWidget(QtWidgets.QFrame):
         
         #Set up label including adding to layout
         self.statLabel = QtWidgets.QLabel(self)
-        self.statLabel.setText(self.Stat.name)
+        self.statLabel.setText(self.Stat.getName())
         self.statLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.statLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.statLabel.setObjectName("statLabel")
@@ -92,11 +90,21 @@ class StatWidget(QtWidgets.QFrame):
         #Connect value line edit function
         self.valueLineEdit.editingFinished.connect(self.valueFunction)       
     
-    
     def valueFunction(self):
         '''Function to set value of stat as well as change modifier accordingly'''
         inputValue=self.valueLineEdit.text()
         if inputValue != str(self.Stat.value):
             self.Stat.set(inputValue)
             self.modLineEdit.setText(str(self.Stat.getModifier()))
-            self.Parent.testFunction()
+            self.Parent.refreshUI()
+            print(self.parentWidget)
+    
+    def refreshUI(self):
+        '''refresh function that checks that stat widget number matches
+        the corrisponding stat in the player class.'''
+        self.valueLineEdit.setText(str(self.Stat.get()))
+        self.modLineEdit.setText(str(self.Stat.getModifier()))
+        
+    
+    def test(self):
+        print('stat')

@@ -7,8 +7,10 @@ from PySide2 import QtCore, QtGui, QtWidgets
 
 
 class SkillWidget(QtWidgets.QFrame):
-    def __init__(self, skill):
+    def __init__(self, skill, parent):
         super(SkillWidget, self).__init__()
+        self.Skill=skill
+        self.Parent=parent
         
         #Setting paramaters for QFrame inherited class
         self.setGeometry(QtCore.QRect(420, 140, 164, 744))
@@ -28,7 +30,7 @@ class SkillWidget(QtWidgets.QFrame):
         font.setBold(False)
         
         #Set font size for modifier line edit
-        font.setPointSize(14)
+        font.setPointSize(8)
         
         #Setting up proficiency line edit. Including layout and adding to the frame
         self.profLineEdit = QtWidgets.QLineEdit(self)
@@ -41,7 +43,7 @@ class SkillWidget(QtWidgets.QFrame):
         self.skillFrameHLayout.addWidget(self.profLineEdit)
         
         #Set font size for value line edit
-        font.setPointSize(22)
+        font.setPointSize(10)
         
         #Setting up modifier line edit. Including layout and adding to the frame
         self.modLineEdit = QtWidgets.QLineEdit(self)
@@ -55,11 +57,14 @@ class SkillWidget(QtWidgets.QFrame):
         
         #Set up label including adding to layout
         self.skillLabel = QtWidgets.QLabel(self)
-        self.skillLabel.setText(skill)
+        self.skillLabel.setText(self.Skill.getName(stat=True))
         self.skillLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.skillLabel.setAlignment(QtCore.Qt.AlignCenter)
         self.skillLabel.setObjectName("skillLabel")
         self.skillFrameHLayout.addWidget(self.skillLabel)
+        
+        #Set default for modifier
+        self.setModifier()
         
         self.connectInputs()
         
@@ -74,4 +79,11 @@ class SkillWidget(QtWidgets.QFrame):
     
     def modFunction(self):
         print('skill mod')
+        
+    def setModifier(self):
+        '''Sets the modifier value.'''
+        self.modLineEdit.setText(str(self.Skill.getModifier()))
+    
+    def test(self):
+        print ('Skills')
         
