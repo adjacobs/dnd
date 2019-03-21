@@ -84,6 +84,3 @@ class SkillWidget(QtWidgets.QFrame):
         '''Sets the modifier value.'''
         self.modLineEdit.setText(str(self.Skill.getModifier()))
     
-    def test(self):
-        print ('Skills')
-        

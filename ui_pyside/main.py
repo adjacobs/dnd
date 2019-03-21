@@ -86,22 +86,21 @@ class UI(QtWidgets.QMainWindow):
         self.skillsFrame.setGeometry(QtCore.QRect(260, 50, 184, 641))
         self.skillsFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.skillsFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.skillsFrame.setObjectName("statsFrame")
+        self.skillsFrame.setObjectName("skillsFrame")
         
         #Adding frame to central layout
         self.centralGLayout.addWidget(self.skillsFrame)
         
         #Setting frame layout for skills to be added to
         self.skillsFrameVLayout = QtWidgets.QVBoxLayout(self.skillsFrame)
-        self.skillsFrameVLayout.setObjectName("statsFrameVLayout")
+        self.skillsFrameVLayout.setObjectName("skillsFrameVLayout")
         
         #Go through the player skills and build out a frame widget for each
         #Passing in "self" so stat widgets can all refresh together
         for skill in self.Player.getSkills():
-            widget=SkillWidget(skill, self)
-            self.skillsFrameVLayout.addWidget(widget)
+            self.skillsFrameVLayout.addWidget(SkillWidget(skill, self))
     
-    def refreshUI(self):
-        print('111111111111111')
-        for i in range(self.skillsFrameVLayout.count()):
-            self.skillsFrameVLayout.itemAt(i).lineWidth(50)
+    def refreshSkills(self):
+        '''Goes through skill widgets and makes sure that the visual matches what the Player class has.'''
+        for skill in self.skillsFrame.findChildren(QtWidgets.QFrame, 'skillFrame'):
+            skill.setModifier()

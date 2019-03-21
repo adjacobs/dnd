@@ -88,16 +88,16 @@ class StatWidget(QtWidgets.QFrame):
         self.statFrameVLayout.addLayout(self.modHLayout)
         
         #Connect value line edit function
-        self.valueLineEdit.editingFinished.connect(self.valueFunction)       
+        self.valueLineEdit.editingFinished.connect(self.setValue)       
     
-    def valueFunction(self):
-        '''Function to set value of stat as well as change modifier accordingly'''
+    def setValue(self):
+        '''Function to set value of stat as well as change modifier accordingly
+        Can be set on the UI level'''
         inputValue=self.valueLineEdit.text()
         if inputValue != str(self.Stat.value):
             self.Stat.set(inputValue)
             self.modLineEdit.setText(str(self.Stat.getModifier()))
-            self.Parent.refreshUI()
-            print(self.parentWidget)
+            self.Parent.refreshSkills()
     
     def refreshUI(self):
         '''refresh function that checks that stat widget number matches
@@ -105,6 +105,3 @@ class StatWidget(QtWidgets.QFrame):
         self.valueLineEdit.setText(str(self.Stat.get()))
         self.modLineEdit.setText(str(self.Stat.getModifier()))
         
-    
-    def test(self):
-        print('stat')
