@@ -39,8 +39,6 @@ class StatWidget(QtWidgets.QFrame):
         self.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.setObjectName("statFrame")
         
-        
-        
         #Setting layout that frame uses
         self.statFrameVLayout = QtWidgets.QVBoxLayout(self)
         self.statFrameVLayout.setObjectName("statFrameVLayout")
