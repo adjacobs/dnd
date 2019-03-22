@@ -5,6 +5,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 #Import of UI elemenets
 from dnd.ui_pyside.stats import StatsWidget
 from dnd.ui_pyside.skills import SkillWidget
+from dnd.ui_pyside.details import DetailsWidget
 from dnd.ui_pyside.util import VFrameWidget, HFrameWidget
 
 from PySide2.QtWidgets import QWidget
@@ -65,53 +66,56 @@ class UI(QtWidgets.QMainWindow):
         self.dropDownMenu.setTitle(QtWidgets.QApplication.translate("MainWindow", "dropDownMenu", None, 1))
         self.dropDownMenuItem.setText(QtWidgets.QApplication.translate("MainWindow", "dropDownMenuItem", None, -1))
     
-    '''Sets up title widget and layout'''
+    '''Sets up the first frame of the main frame and adds its children frame (2).
+    First child is the Avatar frame. Second is the character info frame (Name, race, ect..)'''
     def setBannerLayout(self):
-        #Setting up frame pramaters
+        #Setting up parent frame pramaters
         self.bannerFrame = HFrameWidget('Banner')
         self.bannerFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.bannerFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         
-        #Adding frame to central layout
+        #Adding parent frame to central layout
         self.centralVLayout.addWidget(self.bannerFrame)        
         
+        #Adding the avatar and character info frames to the banner frame
         self.avatarLayout=HFrameWidget('avatar')
         self.chrInfoLayout=HFrameWidget('info')
         
+        #Adding children(2) to frame.
         self.bannerFrame.layout.addWidget(self.avatarLayout)
         self.bannerFrame.layout.addWidget(self.chrInfoLayout)
-        
+    
+    '''Sets up the second frame (horizontal) of the main layout and adds its children frame (2).
+    First child is the stats frame. Child two is another frame layout including more character details, 
+    equipment and other information.'''
     def setChracterLayout(self):
-        #Setting up frame pramaters
+        #Setting up the paraent frame pramaters
         self.characterFrame = HFrameWidget('character')
         self.characterFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.characterFrame.setFrameShadow(QtWidgets.QFrame.Raised)
         
-        #Adding frame to central layout
+        #Adding parent frame to central layout
         self.centralVLayout.addWidget(self.characterFrame)        
         
-        self.statsWidget=StatsWidget(self.Player, self)
-        self.chrOverviewWidget=VFrameWidget('overview')
+        #Adding First child (stats) to frame. StatsWidget is a self contained class.
+        self.characterFrame.layout.addWidget(StatsWidget(self.Player, self))
         
-        self.characterFrame.layout.addWidget(self.statsWidget)
+        #Setting up and adding second child (vertical) frame. Will have children (2).
+        self.chrOverviewWidget=VFrameWidget('overview')
         self.characterFrame.layout.addWidget(self.chrOverviewWidget)
         
-        self.setCharacterDetailsLayout()
-        
-    def setCharacterDetailsLayout(self):
+        #Setting up and adding children frame
         self.characteSpecs=HFrameWidget('Specs')
-        
-        self.characterDetailsFrame=HFrameWidget('details')
-        self.characterEquipmentFrame=HFrameWidget('equipment')
-        
         self.chracterMenu=HFrameWidget('menu')
-        
         self.chrOverviewWidget.layout.addWidget(self.characteSpecs)
         self.chrOverviewWidget.layout.addWidget(self.chracterMenu)
         
-        self.characteSpecs.layout.addWidget(self.characterDetailsFrame)
+        #Adding First child (details) to specs frame. StatsWidget is a self contained class.
+        self.characteSpecs.layout.addWidget(DetailsWidget())
+        #Adding temp frame for visual readablity. To be replaced with self contained widget class
+        self.characterEquipmentFrame=HFrameWidget('equipment')
         self.characteSpecs.layout.addWidget(self.characterEquipmentFrame)
-    
+       
     def addSkills(self):
         '''Builds Frame for skills widgets to get added to and adds the frame to the central widget'''
         #Setting up frame pramaters

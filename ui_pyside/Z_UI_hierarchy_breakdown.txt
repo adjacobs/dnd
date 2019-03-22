@@ -1,0 +1,10 @@
+Main
+--banner
+----avatar
+----info
+--character
+----stats
+------Individual stat widgets
+----character overview
+------Specs
+------Menu
