@@ -7,11 +7,11 @@ import subprocess
 
 UIPath=r'C:\Users\ajacobs\Python\tools\dnd\UI\resources'
 
-ogFile = 'testWidget2'
-ogFilePath = r'C:\Users\ajacobs\Python\tools\dnd\UI\resources\\'+ ogFile + '.ui'
+ogFile = 'tab'
+ogFilePath = r'C:\\Users\\ajacobs\\eclipseWorkSpace\\python\\temp\\'+ ogFile + '.ui'
 
-newFile='testWidget2'
-newFilePath = r'C:\Users\ajacobs\Python\tools\dnd\UI\designer\\'+ newFile + '.py' 
+newFile='tab'
+newFilePath = r'C:\\Users\\ajacobs\\eclipseWorkSpace\\python\\temp\\'+ newFile + '.py' 
 
 cmdLine=r'C:\Users\ajacobs\AppData\Local\Programs\Python\Python35\Scripts\pyside2-uic.exe ' + ogFilePath + ' -o ' + newFilePath
 
