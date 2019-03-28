@@ -6,6 +6,7 @@ from PySide2 import QtCore, QtGui, QtWidgets
 from dnd.ui_pyside.stats import StatsWidget
 from dnd.ui_pyside.skills import SkillWidget
 from dnd.ui_pyside.details import DetailsWidget
+from dnd.ui_pyside.tab import Tab
 from dnd.ui_pyside.util import VFrameWidget, HFrameWidget
 
 from PySide2.QtWidgets import QWidget
@@ -105,16 +106,23 @@ class UI(QtWidgets.QMainWindow):
         self.characterFrame.layout.addWidget(self.chrOverviewWidget)
         
         #Setting up and adding children frame
-        self.characteSpecs=HFrameWidget('Specs')
+        #Sepc frame containing details and equipment frame
+        #Menu frame containing tab widget with skills, inventory, ect..
+        self.characteSpecs=HFrameWidget('specs')
         self.chracterMenu=HFrameWidget('menu')
         self.chrOverviewWidget.layout.addWidget(self.characteSpecs)
         self.chrOverviewWidget.layout.addWidget(self.chracterMenu)
         
         #Adding First child (details) to specs frame. StatsWidget is a self contained class.
         self.characteSpecs.layout.addWidget(DetailsWidget())
+        
         #Adding temp frame for visual readablity. To be replaced with self contained widget class
         self.characterEquipmentFrame=HFrameWidget('equipment')
         self.characteSpecs.layout.addWidget(self.characterEquipmentFrame)
+        
+        #Adding tab widget to character layout
+        self.menuTab=Tab()
+        self.chracterMenu.layout.addWidget(self.menuTab)
        
     def addSkills(self):
         '''Builds Frame for skills widgets to get added to and adds the frame to the central widget'''
