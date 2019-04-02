@@ -4,11 +4,27 @@ Created on Mar 22, 2019
 @author: ajacobs
 '''
 import os
-addAll = (r'cd C:\\Users\\ajacobs\\eclipseWorkSpace\\python\\dnd && git add --all')
-os.system(addAll)
 
-commitAll = (r'cd C:\\Users\\ajacobs\\eclipseWorkSpace\\python\\dnd && git commit -am "this is a test checking"')
-os.system(commitAll)
+workspace=(os.path.dirname(os.path.dirname((__file__))))
+module='dnd'
 
-pushAll = (r'cd C:\\Users\\ajacobs\\eclipseWorkSpace\\python\\dnd && git push')
-os.system(pushAll)
+comment=''
+
+command=r'cd %s\\%s && git'%(workspace, module)
+
+def push():
+    addAll = (command + r' add --all')
+    os.system(addAll)
+    
+    commitAll = (command + r' commit -am "this is a test checking"')
+    os.system(commitAll)
+    
+    pushAll = (command + r' push')
+    os.system(pushAll)
+
+def get():
+    pushAll = (command + r' pull')
+    os.system(pushAll)
+
+
+push()
