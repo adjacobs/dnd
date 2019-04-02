@@ -3,7 +3,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
 #Import of UI elemenets
-from dnd.ui_pyside.stats import StatsWidget
+from dnd.ui_pyside.statsV2 import StatsWidget
 from dnd.ui_pyside.skills import SkillWidget
 from dnd.ui_pyside.details import DetailsWidget
 from dnd.ui_pyside.tab import Tab
@@ -101,6 +101,7 @@ class UI(QtWidgets.QMainWindow):
         #Adding First child (stats) to frame. StatsWidget is a self contained class.
         self.characterFrame.layout.addWidget(StatsWidget(self.Player, self))
         
+        '''
         #Setting up and adding second child (vertical) frame. Will have children (2).
         self.chrOverviewWidget=VFrameWidget('overview')
         self.characterFrame.layout.addWidget(self.chrOverviewWidget)
@@ -123,7 +124,7 @@ class UI(QtWidgets.QMainWindow):
         #Adding tab widget to character layout
         self.menuTab=Tab()
         self.chracterMenu.layout.addWidget(self.menuTab)
-       
+        '''
     def addSkills(self):
         '''Builds Frame for skills widgets to get added to and adds the frame to the central widget'''
         #Setting up frame pramaters

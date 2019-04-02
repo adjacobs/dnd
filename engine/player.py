@@ -62,8 +62,15 @@ class Player(Characters):
         self.wis=Stat('Wisdom')
         self.cha=Stat('Charisma')
     
-    def getStats(self):
+    def getStats(self, filter=[]):
         '''Retunrs a list of all the player stats.'''
+        if filter:
+            stats=[]
+            for stat in self.getStats():
+                if stat.getName() in filter:
+                    stats.append(stat)
+            return stats
+                    
         return [self.str, self.dex, self.con,
                 self.int, self.wis, self.cha]
         
@@ -87,13 +94,24 @@ class Player(Characters):
         self.stealth=Skill('Stealth',self.dex)
         self.survival=Skill('Survival', self.wis)
     
-    def getSkills(self):
-        '''Returns a list of all the player skills.'''
+    def getSkills(self, byStat=False):
+        '''Returns a list of all the player skills. Be deault returns a list of all skills.
+        Can be filtered by associated stat.'''
+        if byStat:
+            #Set up base keys for stat dictionary
+            skills={'Strength':[],'Dextarity':[],'Constitution':[], 
+                    'Intelegence':[], 'Wisdom':[], 'Charisma':[]}
+            #Goes through skills and places them in a dictionary with the key being their associated stat
+            for s in self.getSkills():
+                skills[s.getStat()].append(s)
+            return skills
+                
         return [self.actobatics, self.animalHandling, self.arcana, self.athletics,
                 self.deception, self.history, self.insight, self.intimidation,
                 self.investigation, self.medicine, self.nature, self.perception,
                 self.performance, self.persuasion, self.religion, self.slightOfHand,
                 self.stealth, self.survival]
+        
         
     def setLvl(self, lvl):
         self.level=lvl
@@ -178,12 +196,10 @@ class Stat():
         self.value=0
         self.prof=False
     
-    def getName(self, long=False):
+    def getName(self):
         '''returns name'''
-        if long:
-            return self.name
-        return self.name[:3]
-    
+        return self.name
+
     def set(self, val):
         '''sets stat value'''
         self.value=int(val)
@@ -228,11 +244,13 @@ class Skill():
     def getModifier(self):
         return self.Stat.getModifier()
     
-    def getName(self, stat=False):
-        '''Returns name of skill. If stat true includes abriviated control stat'''
-        if stat:
-            return self.name + ' (%s)'%self.Stat.getName(long=False)
+    def getName(self):
+        '''Returns name of skill.'''
         return self.name
+    
+    def getStat(self):
+        '''Returns the stat name accociated with the skill.'''
+        return self.Stat.getName()
     
     def setProf(self, prof):
         '''Sets if skill is proficient'''
@@ -249,5 +267,3 @@ class Skill():
     def getExpert(self):
         '''Returns True or False depending if the player is an expert in the skill.'''
         return self.expert
-        
-    
