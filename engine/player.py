@@ -7,9 +7,9 @@ import json
 
 class Characters():
     def __init__(self):
-        self.name=''
-        self.race=''
-        self.armorClass=0
+        self.name='Dragon Pisser'
+        self.race='Golioth'
+        self.armorClass=18
     
     def setName(self, name):
         '''Sets name of Person.'''
@@ -36,16 +36,16 @@ class Characters():
 class Player(Characters):
     def __init__(self):
         super(Player, self).__init__()
-        self.level=0
-        self.health=0
-        self.modifier=0
-        self.initiative=0
+        self.level=5
+        self.health=20
+        self.modifier=3
+        self.initiative=4
         self.attackBonus=0
         self.spellModifier=0
         self.spellSave=0
         self.background=''
         self.spells=[]
-        self.charClass=[]
+        self.chrClass={'Fighter':5}
         self.abilities=[]
         
         self.jsonFile=r'C:\Users\ajacobs\Desktop\DnD\export.json'
@@ -160,6 +160,9 @@ class Player(Characters):
     
     def getSpellSave(self):
         return self.spellSave
+    
+    def getClass(self):
+        return self.chrClass
     
     def _gatherData(self):
         stats={}

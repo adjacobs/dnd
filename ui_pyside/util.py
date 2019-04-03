@@ -16,6 +16,8 @@ class VFrameWidget(QtWidgets.QFrame):
         
         #Setting layout that frame uses
         self.layout = QtWidgets.QVBoxLayout(self)
+        self.layout.setSpacing(1)
+        self.layout.setContentsMargins(QtCore.QMargins(1,1,1,1))
         self.layout.setObjectName("VLayout")
         
 class HFrameWidget(QtWidgets.QFrame):
@@ -29,4 +31,6 @@ class HFrameWidget(QtWidgets.QFrame):
         
         #Setting layout that frame uses
         self.layout = QtWidgets.QHBoxLayout(self)
+        self.layout.setSpacing(1)
+        self.layout.setContentsMargins(QtCore.QMargins(1,1,1,1))
         self.layout.setObjectName("HLayout")

@@ -3,7 +3,7 @@
 from PySide2 import QtCore, QtGui, QtWidgets
 
 #Import of UI elemenets
-from dnd.ui_pyside.statsV2 import StatsWidget
+from dnd.ui_pyside.stats import StatsWidget
 from dnd.ui_pyside.skills import SkillWidget
 from dnd.ui_pyside.details import DetailsWidget
 from dnd.ui_pyside.tab import Tab
@@ -29,9 +29,7 @@ class UI(QtWidgets.QMainWindow):
         #Sets up central widget layout for central widget that all UI elements will be added to
         self.centralVLayout = QtWidgets.QVBoxLayout(self.centralwidget)
         self.centralVLayout.setObjectName("centralGLayout")
-        
-        
-        '''Menu stuff. Not needed for a bit.
+    
         #Set up menu par paramaters
         self.menubar = QtWidgets.QMenuBar(self)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 836, 21))
@@ -55,8 +53,7 @@ class UI(QtWidgets.QMainWindow):
         
         self.retranslateUi()
         QtCore.QMetaObject.connectSlotsByName(self)
-        '''
-        
+
         #Adding UI elements
         self.setBannerLayout()
         self.setChracterLayout()
@@ -99,7 +96,7 @@ class UI(QtWidgets.QMainWindow):
         self.centralVLayout.addWidget(self.characterFrame)        
         
         #Adding First child (stats) to frame. StatsWidget is a self contained class.
-        self.characterFrame.layout.addWidget(StatsWidget(self.Player, self))
+        self.characterFrame.layout.addWidget(StatsWidget(self.Player))
         
         '''
         #Setting up and adding second child (vertical) frame. Will have children (2).
