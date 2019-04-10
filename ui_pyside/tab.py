@@ -14,6 +14,7 @@ class Tab(QtWidgets.QTabWidget):
         self.tab = QtWidgets.QWidget()
         self.tab.setObjectName("tab")
         self.addTab(self.tab, "")
+        
         self.tab_2 = QtWidgets.QWidget()
         self.tab_2.setObjectName("tab_2")
         self.addTab(self.tab_2, "")

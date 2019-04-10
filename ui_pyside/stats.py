@@ -4,11 +4,10 @@ Created on Mar 28, 2019
 @author: ajacobs
 '''
 from PySide2 import QtCore, QtGui, QtWidgets
-from dnd.engine.player import Player
 
-class StatsWidget(QtWidgets.QFrame):
+class ChrStatsWidget(QtWidgets.QFrame):
     def __init__(self, Player):
-        super(StatsWidget, self).__init__()
+        super(ChrStatsWidget, self).__init__()
         
         '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
         #Setting up frame pramaters
@@ -170,6 +169,11 @@ class StatWidget(QtWidgets.QFrame):
         self.profLineEdit.setReadOnly(True)
         saveFrameHLayout.addWidget(self.profLineEdit)
         
+        #Set up spacer to offset the expertise line edit from the sklls class.
+        #This way everything lines up
+        spacer=QtWidgets.QSpacerItem(profSize.height(), profSize.width())
+        saveFrameHLayout.addSpacerItem(spacer)
+        
         #Set up label including adding to layout
         self.Label = QtWidgets.QLabel(self)
         self.Label.setText('Save')
@@ -233,8 +237,8 @@ class SkillWidget(QtWidgets.QFrame):
         skillFrameHLayout.setObjectName("skillFrameVLayout")
         skillFrameHLayout.setContentsMargins(layoutMargin)
         
-        #Set prof/expert line edit including adding to layout
-        self.profLineEdit = QtWidgets.QLineEdit(self)
+        #Set prof line edit including adding to layout
+        self.profLineEdit = QtWidgets.QLineEdit()
         self.profLineEdit.setFont(font)
         self.profLineEdit.setMaxLength(2)
         self.profLineEdit.setAlignment(QtCore.Qt.AlignCenter)
@@ -244,8 +248,19 @@ class SkillWidget(QtWidgets.QFrame):
         self.profLineEdit.setReadOnly(True)
         skillFrameHLayout.addWidget(self.profLineEdit)
         
+        #Set expertise line edit including adding to layout
+        self.expertLineEdit = QtWidgets.QLineEdit()
+        self.expertLineEdit.setFont(font)
+        self.expertLineEdit.setMaxLength(2)
+        self.expertLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        self.expertLineEdit.setMinimumSize(profSize)
+        self.expertLineEdit.setMaximumSize(profSize)
+        self.expertLineEdit.setObjectName("expertLineEdit")
+        self.expertLineEdit.setReadOnly(True)
+        skillFrameHLayout.addWidget(self.expertLineEdit)
+        
         #Set up label including adding to layout
-        skillLabel = QtWidgets.QLabel(self)
+        skillLabel = QtWidgets.QLabel()
         skillLabel.setText(skill.getName())
         skillLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
         skillLabel.setAlignment(QtCore.Qt.AlignCenter)
@@ -253,7 +268,7 @@ class SkillWidget(QtWidgets.QFrame):
         skillFrameHLayout.addWidget(skillLabel)
         
         #Set up modifier line edit including adding to layout
-        self.modLineEdit = QtWidgets.QLineEdit(self)
+        self.modLineEdit = QtWidgets.QLineEdit()
         self.modLineEdit.setFont(font)
         self.modLineEdit.setMaxLength(2)
         self.modLineEdit.setAlignment(QtCore.Qt.AlignCenter)
@@ -267,14 +282,3 @@ class SkillWidget(QtWidgets.QFrame):
     
     def update(self):
         self.modLineEdit.setText(str(self.Skill.getModifier()))
-
-'''
-import sys        
-app = QtWidgets.QApplication(sys.argv)
-window = QtWidgets.QWidget()
-layout = QtWidgets.QVBoxLayout(window)
-layout.addWidget(StatsWidget(Player()))
-window.show()
-sys.exit(app.exec_())
-'''
-        
