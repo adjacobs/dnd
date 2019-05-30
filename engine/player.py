@@ -3,42 +3,36 @@ Created on Jun 19, 2018
 
 @author: ajacobs
 '''
+import logging
 import json
+
+logging.basicConfig(filename=r'D:\myStuff\logs\test.log', level=logging.DEBUG)
 
 class Characters():
     def __init__(self):
-        self.name='Dragon Pisser'
-        self.race='Golioth'
-        self.armorClass=18
+        self.name=''
+        self.race=''
+        self.armorClass=0
     
     def setName(self, name):
         '''Sets name of Person.'''
         self.name=name
-    def getName(self):
-        '''Returns name of person.'''
-        return self.name
 
     def setRace(self, race):
         '''Sets Race of Person.'''
         self.Race=race
-    def getRace(self):
-        '''Returns Race of person.'''
-        return self.race
 
     def setArmorClass(self, armorClass):
         '''Sets armor class.'''
         self.armorClass=armorClass
-    
-    def getArmorClass(self):
-        '''Returns armor class.'''
-        return self.armorClass
 
 class Player(Characters):
     def __init__(self):
         super(Player, self).__init__()
-        self.level=5
-        self.health=20
-        self.modifier=3
+        self.logger = logging.getLogger(__name__)
+        
+        self.level=0
+        self.health=0
         self.initiative=4
         self.attackBonus=0
         self.spellModifier=0
@@ -50,10 +44,10 @@ class Player(Characters):
         
         self.jsonFile=r'C:\Users\ajacobs\Desktop\DnD\export.json'
     
-        self._buildStatClassList()
-        self._buildSkillClassList()
+        self._buildStats()
+        self._buildSkills()
         
-    def _buildStatClassList(self):
+    def _buildStats(self):
         '''Creates a Stat instance for each of the base stats.'''
         self.str=Stat('Strength')
         self.dex=Stat('Dextarity')
@@ -61,20 +55,8 @@ class Player(Characters):
         self.int=Stat('Intelegence')
         self.wis=Stat('Wisdom')
         self.cha=Stat('Charisma')
-    
-    def getStats(self, filter=[]):
-        '''Retunrs a list of all the player stats.'''
-        if filter:
-            stats=[]
-            for stat in self.getStats():
-                if stat.getName() in filter:
-                    stats.append(stat)
-            return stats
-                    
-        return [self.str, self.dex, self.con,
-                self.int, self.wis, self.cha]
         
-    def _buildSkillClassList(self):
+    def _buildSkills(self):
         self.actobatics=Skill('Acrobatics', self.dex)
         self.animalHandling=Skill('Animal Handling', self.wis)
         self.arcana=Skill('Arcana', self.int)
@@ -94,18 +76,14 @@ class Player(Characters):
         self.stealth=Skill('Stealth',self.dex)
         self.survival=Skill('Survival', self.wis)
     
-    def getSkills(self, byStat=False):
+    def getStats(self):
+        '''Retunrs a list of all the player stats.'''
+        return [self.str, self.dex, self.con,
+                self.int, self.wis, self.cha]
+        
+    def getSkills(self):
         '''Returns a list of all the player skills. Be deault returns a list of all skills.
         Can be filtered by associated stat.'''
-        if byStat:
-            #Set up base keys for stat dictionary
-            skills={'Strength':[],'Dextarity':[],'Constitution':[], 
-                    'Intelegence':[], 'Wisdom':[], 'Charisma':[]}
-            #Goes through skills and places them in a dictionary with the key being their associated stat
-            for s in self.getSkills():
-                skills[s.getStat()].append(s)
-            return skills
-                
         return [self.actobatics, self.animalHandling, self.arcana, self.athletics,
                 self.deception, self.history, self.insight, self.intimidation,
                 self.investigation, self.medicine, self.nature, self.perception,
@@ -114,55 +92,46 @@ class Player(Characters):
         
         
     def setLvl(self, lvl):
-        self.level=lvl
-    
-    def getLvl(self):
-        return self.level
+        '''Checks that "lvl" is and int and is 20 or under. If so sets the level
+        logs and error and does nothing.'''
+        if isinstance(lvl, int):
+            if lvl<21:
+                self.level=lvl
+        else:
+            pass
     
     def setHealth(self, health):
         self.health=health
     
-    def getHealth(self):
-        return self.health
-    
     def setBackground(self, background):
         self.background=background
-    
-    def getBackground(self):
-        return self.background
-    
-    def setModifier(self, modifier):
-        self.modifier=modifier
-        
-    def getModifier(self):
-        return self.modifier
     
     def setInitiative(self, intitiative):
         self.initiative=intitiative
     
     def getInitiative(self):
-        return self.initiative
+        '''Returns what the initiative is based on level and modifiers.
+        Currently only returs base initiative. Will need to add function
+        to search for feats and items'''
+        initiative = self.dex.getModifier()
+        return initiative
     
+    def getProfBonus(self):
+        '''Returns players proficency bonus based on their level.'''
+        levels = [5,9,12,16]
+        
+        for l in levels:
+            if self.level<l:
+                return levels.index(l)+2
+
     def setAttackBonus(self, attackBonus):
         self.attackBonus=attackBonus
-        
-    def getAttackBonus(self):
-        return self.attackBonus
     
     def setSpellModifier(self, spellModifier):
         self.spellModifier=spellModifier
     
-    def getSpellModifier(self):
-        return self.spellModifier
-    
     def setSpellSave(self, spellSave):
         self.spellSave=spellSave
-    
-    def getSpellSave(self):
-        return self.spellSave
-    
-    def getClass(self):
-        return self.chrClass
     
     def _gatherData(self):
         stats={}
@@ -187,37 +156,21 @@ class Player(Characters):
     def save(self):
         data=self._gatherData()
         with open(self.jsonFile, 'w') as outfile:  
-            json.dump(data, outfile)
-            
-    def testFunction(self):
-        print('Player function works.')
-        
+            json.dump(data, outfile)    
 
 class Stat():
-    def __init__(self, name):
+    def __init__(self, name, value=0, prof=False):
         self.name=name
-        self.value=0
-        self.prof=False
-    
-    def getName(self):
-        '''returns name'''
-        return self.name
+        self.value=value
+        self.prof=prof
 
     def set(self, val):
         '''sets stat value'''
         self.value=int(val)
     
-    def get(self):
-        '''returns stat value'''
-        return self.value
-    
     def setProf(self, val):
         '''sets stat proficiency'''
         self.prof=val
-    
-    def getPorf(self):
-        '''Returns True or False depending if the player is proficient in the stat.'''
-        return self.prof
     
     def getModifier(self):
         '''returns stat modifier proficiency'''
@@ -247,10 +200,6 @@ class Skill():
     def getModifier(self):
         return self.Stat.getModifier()
     
-    def getName(self):
-        '''Returns name of skill.'''
-        return self.name
-    
     def getStat(self):
         '''Returns the stat name accociated with the skill.'''
         return self.Stat.getName()
@@ -258,15 +207,9 @@ class Skill():
     def setProf(self, prof):
         '''Sets if skill is proficient'''
         self.prof=prof
-        
-    def getProf(self):
-        '''Returns True or False depending if the player is proficient in the skill.'''
-        return self.prof
     
     def setExpert(self, expert):
         '''Sets if skill is expert.'''
         self.expert=expert
-    
-    def getExpert(self):
-        '''Returns True or False depending if the player is an expert in the skill.'''
-        return self.expert
+
+Player()
