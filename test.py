@@ -3,16 +3,18 @@ Created on May 24, 2019
 
 @author: ajacobs
 '''
-import logging
-import json
+import os
 
-logging.basicConfig(filename=r'D:\myStuff\logs\test.log', level=logging.DEBUG)
-
-logging.debug('test message')
-
-class Test():
+class A():
     def __init__(self):
-        self.logger=logging.getLogger(__name__)
-        self.logger.debug('testign class')
-        
-Test()
+        self.name='Tim'
+        self.AC=10
+    
+    def func(self):
+        return self.AC
+
+class B(A):
+    def __init__(self):
+        pass
+
+print (B().func())
