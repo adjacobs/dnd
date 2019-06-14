@@ -1,209 +1,208 @@
-'''
+""""
 Created on Mar 21, 2019
 
 @author: ajacobs
-'''
+"""
 from PySide2 import QtCore, QtGui, QtWidgets
-from PySide2.QtWidgets import QPushButton
+
 
 class DetailsWidget(QtWidgets.QFrame):
     def __init__(self):
         super(DetailsWidget, self).__init__()
         
         '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
-        #Setting up frame pramaters
+        # Setting up frame parameter
         self.setGeometry(QtCore.QRect(260, 50, 184, 641))
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setObjectName("specsFrame")
         
-        #self.setMaximumWidth(100)
+        # self.setMaximumWidth(100)
         
-        #Setting frame layout for stat widgets to be added to
+        # Setting frame layout for stat widgets to be added to
         self.layout = QtWidgets.QVBoxLayout(self)
         self.layout.setObjectName("specsLayout")
         
         self.layout.addWidget(CombatFrame())
         self.layout.addWidget(HealthFrame())
 
+
 class CombatFrame(QtWidgets.QFrame):
     def __init__(self):
         super(CombatFrame, self).__init__()
         
         '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
-        #Setting up frame pramaters
+        # Setting up frame parameter
         self.setGeometry(QtCore.QRect(260, 50, 184, 641))
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setObjectName("combatFrame")
         
-        #self.setMaximumWidth(100)
+        # self.setMaximumWidth(100)
         
-        #Setting frame layout for stat widgets to be added to
+        # Setting frame layout for stat widgets to be added to
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.setObjectName("combatLayout")
         
-        self.minSize=QtCore.QSize(50, 50)
-        self.maxSize=QtCore.QSize(50, 50)
-        self.allignment=QtCore.Qt.AlignCenter
+        self.min_size = QtCore.QSize(50, 50)
+        self.max_size = QtCore.QSize(50, 50)
+        self.alignment = QtCore.Qt.AlignCenter
         
-        self.font=QtGui.QFont()
+        self.font = QtGui.QFont()
         self.font.setWeight(50)
         self.font.setUnderline(False)
         self.font.setStrikeOut(False)
         self.font.setBold(False)
         
         self.buildACFrame()
-        self.buildSpeedFrame()
+        self.build_speed_frame()
         self.buildInitiativeFrame()
         
-    def buildACFrame(self):
-        self.acFrame=QtWidgets.QFrame()
-        self.acFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.acFrame.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.acFrame.setObjectName("acFrame")
+    def build_ac_fame(self):
+        ac_frame = QtWidgets.QFrame()
+        ac_frame.setFrameShape(QtWidgets.QFrame.Panel)
+        ac_frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        ac_frame.setObjectName("acFrame")
         
-        self.acLayout=QtWidgets.QVBoxLayout(self.acFrame)
-        self.acLayout.setObjectName('acLayout')
+        ac_layout = QtWidgets.QVBoxLayout(ac_frame)
+        ac_layout.setObjectName('acLayout')
+
+        ac_line_edit = QtWidgets.QLineEdit()
+        ac_line_edit.setMinimumSize(self.min_size)
+        ac_line_edit.setMaximumSize(self.max_size)
+        ac_line_edit.setFont(self.font)
+        ac_line_edit.setAlignment(self.alignment)
         
-        self.acLineEdit=QtWidgets.QLineEdit()
-        self.acLineEdit=QtWidgets.QLineEdit()
-        self.acLineEdit.setMinimumSize(self.minSize)
-        self.acLineEdit.setMaximumSize(self.maxSize)
-        self.acLineEdit.setFont(self.font)
-        self.acLineEdit.setAlignment(self.allignment)
+        ac_label = QtWidgets.QLabel('Armor Class')
         
-        self.acLabel=QtWidgets.QLabel('Armor Class')
+        ac_layout.addWidget(ac_line_edit)
+        ac_layout.addWidget(ac_label)
         
-        self.acLayout.addWidget(self.acLineEdit)
-        self.acLayout.addWidget(self.acLabel)
+        self.layout.addWidget(ac_frame)
         
-        self.layout.addWidget(self.acFrame)
+    def build_speed_frame(self):
+        speed_frame = QtWidgets.QFrame()
+        speed_frame.setFrameShape(QtWidgets.QFrame.Panel)
+        speed_frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        speed_frame.setObjectName("speedFrame")
         
-    def buildSpeedFrame(self):
-        self.speedFrame=QtWidgets.QFrame()
-        self.speedFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.speedFrame.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.speedFrame.setObjectName("speedFrame")
+        speed_layout = QtWidgets.QVBoxLayout(speed_frame)
+        speed_layout.setObjectName('speedLayout')
         
-        self.speedLayout=QtWidgets.QVBoxLayout(self.speedFrame)
-        self.speedLayout.setObjectName('speedLayout')
+        speed_line_edit = QtWidgets.QLineEdit()
+        speed_line_edit.setMinimumSize(self.min_size)
+        speed_line_edit.setMaximumSize(self.max_size)
+        speed_line_edit.setFont(self.font)
+        speed_line_edit.setAlignment(self.alignment)
         
-        self.speedLineEdit=QtWidgets.QLineEdit()
-        self.speedLineEdit.setMinimumSize(self.minSize)
-        self.speedLineEdit.setMaximumSize(self.maxSize)
-        self.speedLineEdit.setFont(self.font)
-        self.speedLineEdit.setAlignment(self.allignment)
+        speed_label = QtWidgets.QLabel('Speed')
         
-        self.speedLabel=QtWidgets.QLabel('Speed')
+        speed_layout.addWidget(speed_line_edit)
+        speed_layout.addWidget(speed_label)
         
-        self.speedLayout.addWidget(self.speedLineEdit)
-        self.speedLayout.addWidget(self.speedLabel)
-        
-        self.layout.addWidget(self.speedFrame)
+        self.layout.addWidget(speed_frame)
         
     def buildInitiativeFrame(self):
-        self.initiativeFrame=QtWidgets.QFrame()
-        self.initiativeFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.initiativeFrame.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.initiativeFrame.setObjectName("initiativeFrame")
+        initiative_frame = QtWidgets.QFrame()
+        initiative_frame.setFrameShape(QtWidgets.QFrame.Panel)
+        initiative_frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        initiative_frame.setObjectName("initiativeFrame")
         
-        self.initiativeLayout=QtWidgets.QVBoxLayout(self.initiativeFrame)
-        self.initiativeLayout.setObjectName('initiativeLayout')
+        initiative_layout = QtWidgets.QVBoxLayout(initiative_frame)
+        initiative_layout.setObjectName('initiativeLayout')
         
-        self.initiativeLineEdit=QtWidgets.QLineEdit()
-        self.initiativeLineEdit.setMinimumSize(self.minSize)
-        self.initiativeLineEdit.setMaximumSize(self.maxSize)
-        self.initiativeLineEdit.setFont(self.font)
-        self.initiativeLineEdit.setAlignment(self.allignment)
+        initiative_line_edit = QtWidgets.QLineEdit()
+        initiative_line_edit.setMinimumSize(self.min_size)
+        initiative_line_edit.setMaximumSize(self.max_size)
+        initiative_line_edit.setFont(self.font)
+        initiative_line_edit.setAlignment(self.alignment)
         
-        self.initiativeLabel=QtWidgets.QLabel('Initiative')
+        initiative_label = QtWidgets.QLabel('Initiative')
         
-        self.initiativeLayout.addWidget(self.initiativeLineEdit)
-        self.initiativeLayout.addWidget(self.initiativeLabel)
+        initiative_layout.addWidget(initiative_line_edit)
+        initiative_layout.addWidget(initiative_label)
         
-        self.layout.addWidget(self.initiativeFrame)
+        self.layout.addWidget(initiative_frame)
+
 
 class HealthFrame(QtWidgets.QFrame):
     def __init__(self):
         super(HealthFrame, self).__init__()
         
         '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
-        #Setting up frame pramaters
+        # Setting up frame pramaters
         self.setGeometry(QtCore.QRect(260, 50, 184, 641))
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setFrameShadow(QtWidgets.QFrame.Plain)
         self.setObjectName("healthFrame")
         
-        #self.setMaximumWidth(100)
+        # self.setMaximumWidth(100)
         
-        #Setting frame layout for stat widgets to be added to
+        # Setting frame layout for stat widgets to be added to
         self.layout = QtWidgets.QHBoxLayout(self)
         self.layout.setObjectName("combatSpecsLayout")
         
-        self.minSize=QtCore.QSize(50, 50)
-        self.maxSize=QtCore.QSize(50, 50)
-        self.allignment=QtCore.Qt.AlignCenter
+        self.min_size = QtCore.QSize(50, 50)
+        self.max_size = QtCore.QSize(50, 50)
+        self.alignment = QtCore.Qt.AlignCenter
         
-        self.font=QtGui.QFont()
+        self.font = QtGui.QFont()
         self.font.setWeight(50)
         self.font.setUnderline(False)
         self.font.setStrikeOut(False)
         self.font.setBold(False)
         
-        self.buildHealthFrame()
-        self.buildTempHealthFrame()
+        self.build_health_frame()
+        self.build_temp_health_frame()
         
-    def buildHealthFrame(self):
-        self.healthFrame=QtWidgets.QFrame()
-        self.healthFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.healthFrame.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.healthFrame.setObjectName("healthFrame")
+    def build_health_frame(self):
+        health_frame = QtWidgets.QFrame()
+        health_frame.setFrameShape(QtWidgets.QFrame.Panel)
+        health_frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        health_frame.setObjectName("healthFrame")
         
-        self.healthLayout=QtWidgets.QHBoxLayout(self.healthFrame)
-        self.healthLayout.setObjectName('healthLayout')
+        health_layout = QtWidgets.QHBoxLayout(health_frame)
+        health_layout.setObjectName('healthLayout')
         
-        self.minusHealthButton=QtWidgets.QPushButton("-")
+        minus_health_button = QtWidgets.QPushButton("-")
         
-        self.healthLineEdit=QtWidgets.QLineEdit()
-        self.healthLineEdit.setMinimumSize(QtCore.QSize(50, 50))
-        self.healthLineEdit.setMaximumSize(QtCore.QSize(50, 50))
-        self.healthLineEdit.setFont(self.font)
-        self.healthLineEdit.setMaxLength(2)
-        self.healthLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        health_line_edit = QtWidgets.QLineEdit()
+        health_line_edit.setMinimumSize(QtCore.QSize(50, 50))
+        health_line_edit.setMaximumSize(QtCore.QSize(50, 50))
+        health_line_edit.setFont(self.font)
+        health_line_edit.setMaxLength(2)
+        health_line_edit.setAlignment(self.alignment)
         
-        self.addHealthButton=QtWidgets.QPushButton("+")
+        add_health_button = QtWidgets.QPushButton("+")
         
-        self.healthLayout.addWidget(self.minusHealthButton)
-        self.healthLayout.addWidget(self.healthLineEdit)
-        self.healthLayout.addWidget(self.addHealthButton)
+        health_layout.addWidget(minus_health_button)
+        health_layout.addWidget(health_line_edit)
+        health_layout.addWidget(add_health_button)
         
-        self.layout.addWidget(self.healthFrame)
+        self.layout.addWidget(health_frame)
     
-    def buildTempHealthFrame(self):
-        self.tempHealthFrame=QtWidgets.QFrame()
-        self.tempHealthFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.tempHealthFrame.setFrameShadow(QtWidgets.QFrame.Plain)
-        self.tempHealthFrame.setObjectName("tempHealthFrame")
+    def build_temp_health_frame(self):
+        temp_health_frame = QtWidgets.QFrame()
+        temp_health_frame.setFrameShape(QtWidgets.QFrame.Panel)
+        temp_health_frame.setFrameShadow(QtWidgets.QFrame.Plain)
+        temp_health_frame.setObjectName("tempHealthFrame")
         
-        self.tempHealthLayout=QtWidgets.QHBoxLayout(self.tempHealthFrame)
-        self.tempHealthLayout.setObjectName('tempHealthLayout')
+        temp_health_layout = QtWidgets.QHBoxLayout(temp_health_frame)
+        temp_health_layout.setObjectName('tempHealthLayout')
         
-        self.minusTempHealthButton=QtWidgets.QPushButton("-")
+        minus_temp_health_button = QtWidgets.QPushButton("-")
         
-        self.tempHealthLineEdit=QtWidgets.QLineEdit()
-        self.tempHealthLineEdit.setMinimumSize(QtCore.QSize(50, 50))
-        self.tempHealthLineEdit.setMaximumSize(QtCore.QSize(50, 50))
-        self.tempHealthLineEdit.setFont(self.font)
-        self.tempHealthLineEdit.setMaxLength(2)
-        self.tempHealthLineEdit.setAlignment(QtCore.Qt.AlignCenter)
+        temp_health_line_edit = QtWidgets.QLineEdit()
+        temp_health_line_edit.setMinimumSize(QtCore.QSize(50, 50))
+        temp_health_line_edit.setMaximumSize(QtCore.QSize(50, 50))
+        temp_health_line_edit.setFont(self.font)
+        temp_health_line_edit.setMaxLength(2)
+        temp_health_line_edit.setAlignment(self.alignment)
         
-        self.addTempHealthButton=QtWidgets.QPushButton("+")
+        add_temp_health_button = QtWidgets.QPushButton("+")
         
-        self.tempHealthLayout.addWidget(self.minusTempHealthButton)
-        self.tempHealthLayout.addWidget(self.tempHealthLineEdit)
-        self.tempHealthLayout.addWidget(self.addTempHealthButton)
+        temp_health_layout.addWidget(minus_temp_health_button)
+        temp_health_layout.addWidget(temp_health_line_edit)
+        temp_health_layout.addWidget(add_temp_health_button)
         
-        self.layout.addWidget(self.tempHealthFrame)
-        
-        
+        self.layout.addWidget(temp_health_frame)

@@ -1,84 +1,81 @@
 
 
-from PySide2 import QtCore, QtGui, QtWidgets
+from PySide2 import QtCore, QtWidgets
 
-#Import of UI elemenets
-
-from dnd.ui_pyside.details import DetailsWidget
-from dnd.ui_pyside.tab import Tab
-
+# Import of UI elemenets
 from dnd.ui_pyside.stats import ChrStatsWidget
 from dnd.ui_pyside.traits import Traits
 from dnd.ui_pyside.title import Title
 from dnd.ui_pyside.util import FrameWidget
 
-from PySide2.QtWidgets import QWidget
 
 class UI(QtWidgets.QMainWindow):
-    def __init__(self, playerEngine):
+    def __init__(self, player_engine):
         super(UI, self).__init__()
         
-        #Setting playerEnding to class variable
-        self.Player = playerEngine()
+        # Setting playerEnding to class variable
+        self.player = player_engine()
         
         self.setObjectName("MainWindow")
         self.resize(836, 1051)
 
-        #Set up central widget for the main window that allows other widgets to be added to.
-        self.centralwidget = QtWidgets.QWidget(self)
-        self.centralwidget.setObjectName("centralwidget")
-        self.setCentralWidget(self.centralwidget)
+        # Set up central widget for the main window that allows other widgets to be added to.
+        self.central_widget = QtWidgets.QWidget(self)
+        self.central_widget.setObjectName("central_widget")
+        self.setCentralWidget(self.central_widget)
         
-        #Sets up central widget layout for central widget that all UI elements will be added to
-        self.centralVLayout = QtWidgets.QVBoxLayout(self.centralwidget)
-        self.centralVLayout.setObjectName("centralGLayout")
+        # Sets up central widget layout for central widget that all UI elements will be added to
+        self.central_v_layout = QtWidgets.QVBoxLayout(self.central_widget)
+        self.central_v_layout.setObjectName("centralGLayout")
     
-        #Set up menu par paramaters
-        self.menubar = QtWidgets.QMenuBar(self)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 836, 21))
-        self.menubar.setObjectName("menubar")
+        # Set up menu par paramaters
+        self.menu_bar = QtWidgets.QMenuBar(self)
+        self.menu_bar.setGeometry(QtCore.QRect(0, 0, 836, 21))
+        self.menu_bar.setObjectName("menu_bar")
         
-        #Set up drop down menu
-        self.dropDownMenu = QtWidgets.QMenu(self.menubar)
-        self.dropDownMenu.setObjectName('dropDownMenu')
+        # Set up drop down menu
+        self.drop_down_menu = QtWidgets.QMenu(self.menu_bar)
+        self.drop_down_menu.setObjectName('drop_down_menu')
         
-        #Add menubar to Main Window
-        self.setMenuBar(self.menubar)
+        # Add menubar to Main Window
+        self.setMenuBar(self.menu_bar)
         
-        #Build drop down item and connect to function
-        self.dropDownMenuItem = QtWidgets.QAction(self)
-        self.dropDownMenuItem.setObjectName("dropDownMenuItem")
-        self.dropDownMenuItem.triggered.connect(self.Player.testFunction)
+        # Build drop down item and connect to function
+        self.drop_down_menu_item = QtWidgets.QAction(self)
+        self.drop_down_menu_item.setObjectName("drop_down_menu_item")
+        # self.drop_down_menu_item.triggered.connect(self.player.test_unction)
         
-        #Adds drop down menu to menu
-        self.dropDownMenu.addAction(self.dropDownMenuItem)
-        self.menubar.addAction(self.dropDownMenu.menuAction())
+        # Adds drop down menu to menu
+        self.drop_down_menu.addAction(self.drop_down_menu_item)
+        self.menu_bar.addAction(self.drop_down_menu.menuAction())
         
-        self.retranslateUi()
+        self.translate_ui()
         QtCore.QMetaObject.connectSlotsByName(self)
 
-        #Adding UI elements
-        self.centralVLayout.addWidget(Banner(self.Player))
-        self.centralVLayout.addWidget(ChrOverView(self.Player))
+        # Adding UI elements
+        self.central_v_layout.addWidget(Banner(self.player))
+        self.central_v_layout.addWidget(ChrOverView(self.player))
         
-    def retranslateUi(self):
+    def translate_ui(self):
         self.setWindowTitle(QtWidgets.QApplication.translate("MainWindow", "DnDWindow", None, -1))
-        self.dropDownMenu.setTitle(QtWidgets.QApplication.translate("MainWindow", "dropDownMenu", None, 1))
-        self.dropDownMenuItem.setText(QtWidgets.QApplication.translate("MainWindow", "dropDownMenuItem", None, -1))
+        self.drop_down_menu.setTitle(QtWidgets.QApplication.translate("MainWindow", "dropDownMenu", None, 1))
+        self.drop_down_menu_item.setText(QtWidgets.QApplication.translate("MainWindow", "dropDownMenuItem", None, -1))
     
-    def refreshSkills(self):
-        '''Goes through skill widgets and makes sure that the visual matches what the Player class has.'''
+    def refresh_skills(self):
+        """Goes through skill widgets and makes sure that the visual matches what the Player class has."""
         for skill in self.skillsFrame.findChildren(QtWidgets.QFrame, 'skillFrame'):
             skill.setModifier()
-            
+
+
 class Banner(FrameWidget):
-    def __init__(self, Player):
-        super(Banner, self).__init__(layoutType='H')
-        self.layout.addWidget(Title(Player))
-        self.layout.addWidget(Traits(Player))
-        
+    def __init__(self, player):
+        super(Banner, self).__init__(layout_type='H')
+        self.layout.addWidget(Title(player))
+        self.layout.addWidget(Traits(player))
+
+
 class ChrOverView(FrameWidget):
-    def __init__(self, Player):
-        super(ChrOverView, self).__init__(layoutType='H')
-        self.layout.addWidget(ChrStatsWidget(Player))
-        #self.layout.addWidget(ChrInfo(Player))
+    def __init__(self, player):
+        super(ChrOverView, self).__init__(layout_type='H')
+        self.layout.addWidget(ChrStatsWidget(player))
+        # self.layout.addWidget(ChrInfo(Player))

@@ -1,23 +1,23 @@
-'''
+""""
 Created on Jun 19, 2018
 
 @author: ajacobs
-'''
-class Ability():
+"""
+
+
+class Ability:
     def __init__(self, name):
-        self.name=name
-        self.description=''
+        self.name = name
+        self.description = ''
     
     def set_name(self, name):
-        self.name=name
+        self.name = name
     
-    def getName(self):
+    def get_name(self):
         return self.name
     
-    def setDescription(self, description):
-        self.description=description
+    def set_description(self, description):
+        self.description = description
     
-    def getDescription(self):
+    def get_description(self):
         return self.description
-        
-        

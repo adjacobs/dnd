@@ -3,11 +3,12 @@ Created on Jun 19, 2018
 
 @author: ajacobs
 """
+
 import logging
 import json
 import os
 
-logging.basicConfig(filename=r'D:\myStuff\logs\test.log', level=logging.DEBUG)
+logging.basicConfig(filename=r'C:\Users\ajacobs\python\_logs\test.log', level=logging.DEBUG)
 
 
 class Characters:
@@ -44,7 +45,7 @@ class Player(Characters):
         self.spell_save = 0
         self.background = ''
         self.spells = []
-        self.chr_class = {'Fighter':5}
+        self.chr_class = {'Fighter': 5}
         self.abilities = []
         
         # Temp file name hardcoded for testing porpuse. Will need to be populated by code at some point
@@ -55,15 +56,15 @@ class Player(Characters):
         
     def _build_stats(self):
         """Creates a Stat instance for each of the base stats."""
-        self.str=Stat('Strength')
-        self.dex=Stat('Dextarity')
-        self.con=Stat('Constitution')
-        self.int=Stat('Intelegence')
-        self.wis=Stat('Wisdom')
-        self.cha=Stat('Charisma')
+        self.str = Stat('Strength')
+        self.dex = Stat('Dextarity')
+        self.con = Stat('Constitution')
+        self.int = Stat('Intelegence')
+        self.wis = Stat('Wisdom')
+        self.cha = Stat('Charisma')
         
     def _build_skills(self):
-        """Builds out a class per skill. With the skill name and its corrisponding stat as the variables."""
+        """Builds out a class per skill. With the skill name and its corresponding stat as the variables."""
         self.acrobatics = Skill('Acrobatics', self.dex)
         self.animal_handling = Skill('Animal Handling', self.wis)
         self.arcana = Skill('Arcana', self.int)
@@ -80,7 +81,7 @@ class Player(Characters):
         self.persuasion = Skill('Persuasuion', self.cha)
         self.religion = Skill('Religion', self.int)
         self.slight_of_hand = Skill('Slight of Hand', self.dex)
-        self.stealth = Skill('Stealth',self.dex)
+        self.stealth = Skill('Stealth', self.dex)
         self.survival = Skill('Survival', self.wis)
     
     def get_stats(self):
@@ -102,48 +103,48 @@ class Player(Characters):
         """Checks that "lvl" is and int and is 20 or under. If so sets the level
         logs and error and does nothing."""
         if isinstance(lvl, int):
-            if lvl<21:
-                self.level=lvl
+            if lvl < 21:
+                self.level = lvl
         else:
             pass
     
     def set_health(self, health):
-        self.health=health
+        self.health = health
     
     def set_background(self, background):
-        self.background=background
+        self.background = background
     
-    def set_initiative(self, intitiative):
-        self.initiative=intitiative
+    def set_initiative(self, initiative):
+        self.initiative = initiative
     
     def get_initiative(self):
         """Returns what the initiative is based on level and modifiers.
-        Currently only returs base initiative. Will need to add function
+        Currently only returns base initiative. Will need to add function
         to search for feats and items"""
         return self.dex.get_modifier()
     
     def get_prof_bonus(self):
-        """Returns players proficency bonus based on their level."""
-        levels = [5,9,12,16]
+        """Returns players proficiency bonus based on their level."""
+        levels = [5, 9, 12, 16]
         
         for l in levels:
-            if self.level<l:
+            if self.level < l:
                 return levels.index(l)+2
 
     def set_attack_bonus(self, attack_bonus):
-        self.attack_bonus=attack_bonus
+        self.attack_bonus = attack_bonus
     
     def set_spell_modifier(self, spell_modifier):
-        self.spell_modifier=spell_modifier
+        self.spell_modifier = spell_modifier
     
     def set_spell_save(self, spell_save):
-        self.spell_save=spell_save
+        self.spell_save = spell_save
     
     def _gather_data(self):
-        stats={}
+        stats = {}
         
         for stat in self.get_stats():
-            info_dict = {'value':stat.value, 'prof':stat.prof,}
+            info_dict = {'value': stat.value, 'prof': stat.prof}
             
             stats[stat.name] = info_dict
         
@@ -160,20 +161,23 @@ class Player(Characters):
         return data_dict
             
     def save(self):
-        data=self._gather_data()
+        data = self._gather_data()
         with open(self.save_file, 'w') as out_file:  
             json.dump(data, out_file)    
+
+    def test_function(self):
+        print('Cat')
 
 
 class Stat:
     def __init__(self, name, value=0, prof=False):
-        self.name=name
-        self.value=value
-        self.prof=prof
+        self.name = name
+        self.value = value
+        self.prof = prof
 
     def set(self, val):
         """sets stat value"""
-        self.value=int(val)
+        self.value = int(val)
     
     def set_prof(self, val):
         """sets stat proficiency"""
@@ -181,14 +185,14 @@ class Stat:
     
     def get_modifier(self):
         """returns stat modifier proficiency"""
-        modifier =0
+        modifier = 0
 
-        #If value is over 10 subtracts 10 and divides by 2 to give you the modifier
-        if self.value>=10:
-            modifier=int((self.value-10)/2)
-        #Under 10 determines if its odd or even
-        #If off subtracts 1
-        #Divides by 2 and then subtracts total from 5
+        # If value is over 10 subtracts 10 and divides by 2 to give you the modifier
+        if self.value >= 10:
+            modifier = int((self.value-10)/2)
+        # Under 10 determines if its odd or even
+        # If off subtracts 1
+        # Divides by 2 and then subtracts total from 5
         else:
             if self.value % 2:
                 modifier = int(-(5-(self.value-1)/2))
@@ -222,11 +226,8 @@ class Skill:
     
     def set_prof(self, prof):
         """Sets if skill is proficient"""
-        self.prof=prof
+        self.prof = prof
     
     def set_expert(self, expert):
         """Sets if skill is expert."""
-        self.expert=expert
-
-
-Player()
+        self.expert = expert

@@ -1,9 +1,10 @@
-'''
+"""
 Created on Mar 25, 2019
 
 @author: ajacobs
-'''
+"""
 from PySide2 import QtCore, QtGui, QtWidgets
+
 
 class Tab(QtWidgets.QTabWidget):
     def __init__(self):

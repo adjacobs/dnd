@@ -1,16 +1,16 @@
-'''
+"""
 Created on Mar 28, 2019
 
 @author: ajacobs
-'''
+"""
 from PySide2 import QtCore, QtGui, QtWidgets
 
+
 class ChrStatsWidget(QtWidgets.QFrame):
-    def __init__(self, Player):
+    def __init__(self, player):
         super(ChrStatsWidget, self).__init__()
-        
-        '''Builds Frame for stat widgets to get added to and adds the frame to the central widget'''
-        #Setting up frame pramaters
+        """Builds Frame for stat widgets to get added to and adds the frame to the central widget"""
+        # Setting up frame pramaters
         self.setGeometry(QtCore.QRect(260, 100, 184, 641))
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -18,267 +18,269 @@ class ChrStatsWidget(QtWidgets.QFrame):
         
         self.setMaximumWidth(200)
         
-        #Setting frame layout for stat widgets to be added to
-        self.statsFrameVLayout = QtWidgets.QVBoxLayout(self)
-        self.statsFrameVLayout.setSpacing(2)
-        self.statsFrameVLayout.setContentsMargins(1,1,1,1)
-        self.statsFrameVLayout.setObjectName("statsFrameVLayout")
+        # Setting frame layout for stat widgets to be added to
+        stats_frame_v_layout = QtWidgets.QVBoxLayout(self)
+        stats_frame_v_layout.setSpacing(2)
+        stats_frame_v_layout.setContentsMargins(1, 1, 1, 1)
+        stats_frame_v_layout.setObjectName("statsFrameVLayout")
         
-        #Go through the player stats and build out a frame widget for each
-        #Passing in "self" so stat widgets can all refresh together
-        for stat in Player.getStats():
-            skills = Player.getSkills(byStat=True)
-            self.statsFrameVLayout.addWidget(StatWidget(stat, skills[stat.getName()]))
+        # Go through the player stats and build out a frame widget for each
+        # Passing in "self" so stat widgets can all refresh together
+        for stat in player.get_stats():
+            skills = player.get_skills()
+            stats_frame_v_layout.addWidget(StatWidget(stat, skills[stat.name]))
+
 
 class StatWidget(QtWidgets.QFrame):
     def __init__(self, stat, skills):
         super(StatWidget, self).__init__()
-        self.Stat=stat
-        self.Skills=[]
+        self.stat = stat
+        self.skills = []
 
-        #Setting paramaters for QFrame inherited class
+        # Setting parameter for QFrame inherited class
         self.setGeometry(QtCore.QRect(50, 50, 50, 50))
         self.setFrameShape(QtWidgets.QFrame.Panel)
         self.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.setObjectName("mainFrame")
         
-        self.mainLayout = QtWidgets.QVBoxLayout(self)
-        self.mainLayout.setContentsMargins(2,2,2,2)
-        self.mainLayout.setSpacing(1)
-        self.mainLayout.setObjectName("mainVLayout")
+        self.main_layout = QtWidgets.QVBoxLayout(self)
+        self.main_layout.setContentsMargins(2, 2, 2, 2)
+        self.main_layout.setSpacing(1)
+        self.main_layout.setObjectName("mainVLayout")
         
-        #Set font class for UI
-        #Set shared font paramaters
+        # Set font class for UI
+        # Set shared font paramaters
         self.font = QtGui.QFont()
         self.font.setWeight(50)
         self.font.setUnderline(False)
         self.font.setStrikeOut(False)
         self.font.setBold(False)
         
-        self._buildStatFrame()
+        self._build_stat_frame()
         self._buildSaveFrame()
         
         for skill in skills:
-            widget=SkillWidget(skill)
-            self.mainLayout.addWidget(widget)
+            widget = SkillWidget(skill)
+            self.main_layout.addWidget(widget)
             self.Skills.append(widget)
     
-    def _buildStatFrame(self):
-        #Set variables for size adjustment
-        valueFont=10
-        modFont=18
-        statSize=QtCore.QSize(20, 20)
-        modSize=QtCore.QSize(30, 30)
-        layoutMargin = QtCore.QMargins(2,1,1,1)
+    def _build_stat_frame(self):
+        # Set variables for size adjustment
+        value_font = 10
+        mod_font = 18
+        stat_size = QtCore.QSize(20, 20)
+        mod_size = QtCore.QSize(30, 30)
+        layout_margin = QtCore.QMargins(2, 1, 1, 1)
         
-        #Set up frame for stat
-        self.statFrame=QtWidgets.QFrame()
-        self.statFrame.setFrameShape(QtWidgets.QFrame.Panel)
-        self.statFrame.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.statFrame.setObjectName("statFrame")
-        self.mainLayout.addWidget(self.statFrame)
+        # Set up frame for stat
+        stat_frame = QtWidgets.QFrame()
+        stat_frame.setFrameShape(QtWidgets.QFrame.Panel)
+        stat_frame.setFrameShadow(QtWidgets.QFrame.Sunken)
+        stat_frame.setObjectName("statFrame")
+        self.main_layout.addWidget(stat_frame)
         
-        #Setting layout that frame uses
-        self.statFrameVLayout = QtWidgets.QHBoxLayout(self.statFrame)
-        self.statFrameVLayout.setObjectName("statFrameVLayout")
-        self.statFrameVLayout.setContentsMargins(layoutMargin)
+        # Setting layout that frame uses
+        stat_frame_v_layout = QtWidgets.QHBoxLayout(stat_frame)
+        stat_frame_v_layout.setObjectName("statFrameVLayout")
+        stat_frame_v_layout.setContentsMargins(layout_margin)
         
-        #Set up label including adding to layout
-        self.statLabel = QtWidgets.QLabel(self)
-        self.statLabel.setText(self.Stat.getName())
-        self.statLabel.setFont(self.font)
-        self.statLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.statLabel.setAlignment(QtCore.Qt.AlignCenter)
-        self.statLabel.setObjectName("statLabel")
-        self.statFrameVLayout.addWidget(self.statLabel)
+        # Set up label including adding to layout
+        stat_label = QtWidgets.QLabel(self)
+        stat_label.setText(self.Stat.getName())
+        stat_label.setFont(self.font)
+        stat_label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        stat_label.setAlignment(QtCore.Qt.AlignCenter)
+        stat_label.setObjectName("statLabel")
+        stat_frame_v_layout.addWidget(stat_label)
         
-        #Spacers set up (Used for both value and modifier)
-        leftSpacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
+        # Spacers set up (Used for both value and modifier)
+        left_spacer_item = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
         
-        #Setting up value line edit. Including layout and adding to the frame
-        self.font.setPointSize(valueFont)
-        self.valueHLayout = QtWidgets.QHBoxLayout()
-        self.valueHLayout.setObjectName("valueHLayout")
-        self.valueHLayout.addItem(leftSpacerItem)
-        self.valueLineEdit = QtWidgets.QLineEdit(self)
-        self.valueLineEdit.setMinimumSize(statSize)
-        self.valueLineEdit.setMaximumSize(statSize)
-        self.valueLineEdit.setFont(self.font)
-        self.valueLineEdit.setMaxLength(2)
-        self.valueLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.valueLineEdit.setObjectName("valueLineEdit")
+        # Setting up value line edit. Including layout and adding to the frame
+        self.font.setPointSize(value_font)
+        value_h_layout = QtWidgets.QHBoxLayout()
+        value_h_layout.setObjectName("valueHLayout")
+        value_h_layout.addItem(left_spacer_item)
+        self.value_line_edit = QtWidgets.QLineEdit(self)
+        self.value_line_edit.setMinimumSize(stat_size)
+        self.value_line_edit.setMaximumSize(stat_size)
+        self.value_line_edit.setFont(self.font)
+        self.value_line_edit.setMaxLength(2)
+        self.value_line_edit.setAlignment(QtCore.Qt.AlignCenter)
+        self.value_line_edit.setObjectName("valueLineEdit")
         
-        #Set value line edit validator
-        onlyInt=QtGui.QIntValidator(0, 40)
-        self.valueLineEdit.setValidator(onlyInt)
+        # Set value line edit validator
+        only_int = QtGui.QIntValidator(0, 40)
+        self.value_line_edit.setValidator(only_int)
         
-        #Set value line edit value
-        self.valueLineEdit.setText(str(self.Stat.get()))
-        self.valueHLayout.addWidget(self.valueLineEdit)
-        self.statFrameVLayout.addLayout(self.valueHLayout)
+        # Set value line edit value
+        self.value_line_edit.setText(str(self.Stat.get()))
+        value_h_layout.addWidget(self.value_line_edit)
+        stat_frame_v_layout.addLayout(value_h_layout)
         
-        #Setting up modifier line edit. Including layout and adding to the frame
-        self.font.setPointSize(modFont)
-        self.modHLayout = QtWidgets.QHBoxLayout()
-        self.modHLayout.setObjectName("modHLayout")
-        self.modHLayout.addItem(leftSpacerItem)
-        self.modLineEdit = QtWidgets.QLineEdit(self)
-        self.modLineEdit.setFont(self.font)
-        self.modLineEdit.setMaxLength(2)
-        self.modLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.modLineEdit.setMinimumSize(modSize)
-        self.modLineEdit.setMaximumSize(modSize)
-        self.modLineEdit.setObjectName("modLineEdit")
-        self.modLineEdit.setReadOnly(True)
+        # Setting up modifier line edit. Including layout and adding to the frame
+        self.font.setPointSize(mod_font)
+        mod_h_layout = QtWidgets.QHBoxLayout()
+        mod_h_layout.setObjectName("modHLayout")
+        mod_h_layout.addItem(left_spacer_item)
+        self.mod_line_edit = QtWidgets.QLineEdit(self)
+        self.mod_line_edit.setFont(self.font)
+        self.mod_line_edit.setMaxLength(2)
+        self.mod_line_edit.setAlignment(QtCore.Qt.AlignCenter)
+        self.mod_line_edit.setMinimumSize(mod_size)
+        self.mod_line_edit.setMaximumSize(mod_size)
+        self.mod_line_edit.setObjectName("modLineEdit")
+        self.mod_line_edit.setReadOnly(True)
         
-        #Set mod line edit value
-        self.modLineEdit.setText(str(self.Stat.getModifier()))
-        self.modHLayout.addWidget(self.modLineEdit)
-        self.statFrameVLayout.addLayout(self.modHLayout)
+        # Set mod line edit value
+        self.mod_line_edit.setText(str(self.Stat.getModifier()))
+        mod_h_layout.addWidget(self.mod_line_edit)
+        stat_frame_v_layout.addLayout(mod_h_layout)
         
-        #Connect value line edit function
-        self.valueLineEdit.editingFinished.connect(self.setValue)
+        # Connect value line edit function
+        self.value_line_edit.editingFinished.connect(self.set_value)
     
     def _buildSaveFrame(self):
-        #Set variables for size adjustment
-        profSize = QtCore.QSize(10, 10)
-        modSize = QtCore.QSize(20, 20)
-        layoutMargin = QtCore.QMargins(5,0,15,0)
+        # Set variables for size adjustment
+        prof_size = QtCore.QSize(10, 10)
+        mod_size = QtCore.QSize(20, 20)
+        layout_margin = QtCore.QMargins(5, 0, 15, 0)
         self.font.setPointSize(10)
         
-        #Set up frame for stat
-        self.saveFrame=QtWidgets.QFrame()
-        self.saveFrame.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.saveFrame.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.saveFrame.setObjectName("saveFrame")
-        self.mainLayout.addWidget(self.saveFrame)
+        # Set up frame for stat
+        save_frame = QtWidgets.QFrame()
+        save_frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        save_frame.setFrameShadow(QtWidgets.QFrame.Raised)
+        save_frame.setObjectName("saveFrame")
+        self.main_layout.addWidget(save_frame)
         
-        #Setting layout that frame uses
-        saveFrameHLayout = QtWidgets.QHBoxLayout(self.saveFrame)
-        saveFrameHLayout.setObjectName("saveFrameVLayout")
-        saveFrameHLayout.setContentsMargins(layoutMargin)
+        # Setting layout that frame uses
+        save_frame_h_layout = QtWidgets.QHBoxLayout(save_frame)
+        save_frame_h_layout.setObjectName("saveFrameVLayout")
+        save_frame_h_layout.setContentsMargins(layout_margin)
         
-        #Set prof/expert line edit including adding to layout
-        self.profLineEdit = QtWidgets.QLineEdit(self)
-        self.profLineEdit.setFont(self.font)
-        self.profLineEdit.setMaxLength(2)
-        self.profLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.profLineEdit.setMinimumSize(profSize)
-        self.profLineEdit.setMaximumSize(profSize)
-        self.profLineEdit.setObjectName("saveProfLineEdit")
-        self.profLineEdit.setReadOnly(True)
-        saveFrameHLayout.addWidget(self.profLineEdit)
+        # Set prof/expert line edit including adding to layout
+        self.prof_line_edit = QtWidgets.QLineEdit(self)
+        self.prof_line_edit.setFont(self.font)
+        self.prof_line_edit.setMaxLength(2)
+        self.prof_line_edit.setAlignment(QtCore.Qt.AlignCenter)
+        self.prof_line_edit.setMinimumSize(prof_size)
+        self.prof_line_edit.setMaximumSize(prof_size)
+        self.prof_line_edit.setObjectName("saveProfLineEdit")
+        self.prof_line_edit.setReadOnly(True)
+        save_frame_h_layout.addWidget(self.prof_line_edit)
         
-        #Set up spacer to offset the expertise line edit from the sklls class.
-        #This way everything lines up
-        spacer=QtWidgets.QSpacerItem(profSize.height(), profSize.width())
-        saveFrameHLayout.addSpacerItem(spacer)
+        # Set up spacer to offset the expertise line edit from the sklls class.
+        # This way everything lines up
+        spacer = QtWidgets.QSpacerItem(prof_size.height(), prof_size.width())
+        save_frame_h_layout.addSpacerItem(spacer)
         
-        #Set up label including adding to layout
-        self.Label = QtWidgets.QLabel(self)
-        self.Label.setText('Save')
-        self.Label.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.Label.setAlignment(QtCore.Qt.AlignCenter)
-        self.Label.setObjectName("self.Label")
-        saveFrameHLayout.addWidget(self.Label)
+        # Set up label including adding to layout
+        label = QtWidgets.QLabel(self)
+        label.setText('Save')
+        label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        label.setAlignment(QtCore.Qt.AlignCenter)
+        label.setObjectName("label")
+        save_frame_h_layout.addWidget(label)
         
-        #Set up modifier line edit including adding to layout
-        self.saveModLineEdit = QtWidgets.QLineEdit(self)
-        self.saveModLineEdit.setFont(self.font)
-        self.saveModLineEdit.setMaxLength(2)
-        self.saveModLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.saveModLineEdit.setMinimumSize(modSize)
-        self.saveModLineEdit.setMaximumSize(modSize)
-        self.saveModLineEdit.setObjectName("modLineEdit")
-        self.saveModLineEdit.setReadOnly(True)
-        saveFrameHLayout.addWidget(self.saveModLineEdit)
+        # Set up modifier line edit including adding to layout
+        self.save_mod_line_edit = QtWidgets.QLineEdit(self)
+        self.save_mod_line_edit.setFont(self.font)
+        self.save_mod_line_edit.setMaxLength(2)
+        self.save_mod_line_edit.setAlignment(QtCore.Qt.AlignCenter)
+        self.save_mod_line_edit.setMinimumSize(mod_size)
+        self.save_mod_line_edit.setMaximumSize(mod_size)
+        self.save_mod_line_edit.setObjectName("modLineEdit")
+        self.save_mod_line_edit.setReadOnly(True)
+        save_frame_h_layout.addWidget(self.save_mod_line_edit)
     
-    def setValue(self):
-        '''Function to set value of stat as well as change modifier accordingly
-        Can be set on the UI level'''
-        inputValue=self.valueLineEdit.text()
-        if inputValue != str(self.Stat.value):
-            self.Stat.set(inputValue)
-            self.modLineEdit.setText(str(self.Stat.getModifier()))
+    def set_value(self):
+        """Function to set value of stat as well as change modifier accordingly
+        Can be set on the UI level"""
+        input_value = self.value_line_edit.text()
+        if input_value != str(self.Stat.value):
+            self.Stat.set(input_value)
+            self.mod_line_edit.setText(str(self.Stat.getModifier()))
             for skill in self.Skills:
                 skill.update()
     
-    def refreshUI(self):
-        '''refresh function that checks that stat widget number matches
-        the corrisponding stat in the player class.'''
-        self.valueLineEdit.setText(str(self.Stat.get()))
-        self.modLineEdit.setText(str(self.Stat.getModifier()))
+    def refresh_ui(self):
+        """refresh function that checks that stat widget number matches
+        the corresponding stat in the player class."""
+        self.value_line_edit.setText(str(self.Stat.get()))
+        self.mod_line_edit.setText(str(self.Stat.getModifier()))
+
 
 class SkillWidget(QtWidgets.QFrame):
     def __init__(self, skill):
         super(SkillWidget, self).__init__()
-        self.Skill=skill
+        self.skill = skill
         
-        #Set shared font paramaters
+        # Set shared font paramaters
         font = QtGui.QFont()
         font.setWeight(50)
         font.setUnderline(False)
         font.setStrikeOut(False)
         font.setBold(False)
         
-        #Set variables for size adjustment
+        # Set variables for size adjustment
         font.setPointSize(10)
-        profSize = QtCore.QSize(10, 10)
-        modSize = QtCore.QSize(20, 20)
-        layoutMargin = QtCore.QMargins(5,0,15,0)
+        prof_size = QtCore.QSize(10, 10)
+        mod_size = QtCore.QSize(20, 20)
+        layout_margin = QtCore.QMargins(5,0,15,0)
         
-        #Set up frame for stat
+        # Set up frame for stat
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.setFrameShadow(QtWidgets.QFrame.Raised)
         self.setObjectName("skillFrame")
         
-        #Setting layout that frame uses
-        skillFrameHLayout = QtWidgets.QHBoxLayout(self)
-        skillFrameHLayout.setObjectName("skillFrameVLayout")
-        skillFrameHLayout.setContentsMargins(layoutMargin)
+        # Setting layout that frame uses
+        skill_frame_h_layout = QtWidgets.QHBoxLayout(self)
+        skill_frame_h_layout.setObjectName("skillFrameVLayout")
+        skill_frame_h_layout.setContentsMargins(layout_margin)
         
-        #Set prof line edit including adding to layout
-        self.profLineEdit = QtWidgets.QLineEdit()
-        self.profLineEdit.setFont(font)
-        self.profLineEdit.setMaxLength(2)
-        self.profLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.profLineEdit.setMinimumSize(profSize)
-        self.profLineEdit.setMaximumSize(profSize)
-        self.profLineEdit.setObjectName("profLineEdit")
-        self.profLineEdit.setReadOnly(True)
-        skillFrameHLayout.addWidget(self.profLineEdit)
+        # Set prof line edit including adding to layout
+        self.prof_line_edit = QtWidgets.QLineEdit()
+        self.prof_line_edit.setFont(font)
+        self.prof_line_edit.setMaxLength(2)
+        self.prof_line_edit.setAlignment(QtCore.Qt.AlignCenter)
+        self.prof_line_edit.setMinimumSize(prof_size)
+        self.prof_line_edit.setMaximumSize(prof_size)
+        self.prof_line_edit.setObjectName("profLineEdit")
+        self.prof_line_edit.setReadOnly(True)
+        skill_frame_h_layout.addWidget(self.prof_line_edit)
         
-        #Set expertise line edit including adding to layout
+        # Set expertise line edit including adding to layout
         self.expertLineEdit = QtWidgets.QLineEdit()
         self.expertLineEdit.setFont(font)
         self.expertLineEdit.setMaxLength(2)
         self.expertLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.expertLineEdit.setMinimumSize(profSize)
-        self.expertLineEdit.setMaximumSize(profSize)
+        self.expertLineEdit.setMinimumSize(prof_size)
+        self.expertLineEdit.setMaximumSize(prof_size)
         self.expertLineEdit.setObjectName("expertLineEdit")
         self.expertLineEdit.setReadOnly(True)
-        skillFrameHLayout.addWidget(self.expertLineEdit)
+        skill_frame_h_layout.addWidget(self.expertLineEdit)
         
-        #Set up label including adding to layout
-        skillLabel = QtWidgets.QLabel()
-        skillLabel.setText(skill.getName())
-        skillLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
-        skillLabel.setAlignment(QtCore.Qt.AlignCenter)
-        skillLabel.setObjectName("skillLabel")
-        skillFrameHLayout.addWidget(skillLabel)
+        # Set up label including adding to layout
+        skill_label = QtWidgets.QLabel()
+        skill_label.setText(skill.getName())
+        skill_label.setLayoutDirection(QtCore.Qt.LeftToRight)
+        skill_label.setAlignment(QtCore.Qt.AlignCenter)
+        skill_label.setObjectName("skill_label")
+        skill_frame_h_layout.addWidget(skill_label)
         
-        #Set up modifier line edit including adding to layout
-        self.modLineEdit = QtWidgets.QLineEdit()
-        self.modLineEdit.setFont(font)
-        self.modLineEdit.setMaxLength(2)
-        self.modLineEdit.setAlignment(QtCore.Qt.AlignCenter)
-        self.modLineEdit.setMinimumSize(modSize)
-        self.modLineEdit.setMaximumSize(modSize)
-        self.modLineEdit.setObjectName("modLineEdit")
-        self.modLineEdit.setReadOnly(True)
-        skillFrameHLayout.addWidget(self.modLineEdit)
+        # Set up modifier line edit including adding to layout
+        self.mod_line_edit = QtWidgets.QLineEdit()
+        self.mod_line_edit.setFont(font)
+        self.mod_line_edit.setMaxLength(2)
+        self.mod_line_edit.setAlignment(QtCore.Qt.AlignCenter)
+        self.mod_line_edit.setMinimumSize(mod_size)
+        self.mod_line_edit.setMaximumSize(mod_size)
+        self.mod_line_edit.setObjectName("modLineEdit")
+        self.mod_line_edit.setReadOnly(True)
+        skill_frame_h_layout.addWidget(self.mod_line_edit)
         
-        self.update()
+        self.update_mod()
     
-    def update(self):
-        self.modLineEdit.setText(str(self.Skill.getModifier()))
+    def update_mod(self):
+        self.mod_line_edit.setText(str(self.Skill.getModifier()))

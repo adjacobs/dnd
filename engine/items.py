@@ -1,12 +1,12 @@
-class Inventory():
+class Inventory:
     def __init__(self):
-        self.copper=0
-        self.silver=0
-        self.gold=0
-        self.platinum=0
-        self.healthPotions=0
-        self.items=[]
-        self.weapons=[]
+        self.copper = 0
+        self.silver = 0
+        self.gold = 0
+        self.platinum = 0
+        self.healthPotions = 0
+        self.items = []
+        self.weapons = []
         
     def getCopper(self):
         #Gets amount of copper in inventory

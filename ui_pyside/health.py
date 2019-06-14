@@ -1,10 +1,10 @@
-'''
+""""
 Created on Apr 4, 2019
 
 @author: ajacobs
-'''
-from PySide2 import QtCore, QtGui, QtWidgets
+"""
 from dnd.ui_pyside.util import *
+
 
 class TabWidget(QtWidgets.QTabWidget):
     def __init__(self):
