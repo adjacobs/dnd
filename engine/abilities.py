@@ -8,7 +8,7 @@ class Ability():
         self.name=name
         self.description=''
     
-    def setName(self, name):
+    def set_name(self, name):
         self.name=name
     
     def getName(self):
