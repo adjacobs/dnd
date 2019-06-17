@@ -10,7 +10,7 @@ class ChrStatsWidget(QtWidgets.QFrame):
     def __init__(self, player):
         super(ChrStatsWidget, self).__init__()
         """Builds Frame for stat widgets to get added to and adds the frame to the central widget"""
-        # Setting up frame pramaters
+        # Setting up frame parameters
         self.setGeometry(QtCore.QRect(260, 100, 184, 641))
         self.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.setFrameShadow(QtWidgets.QFrame.Raised)
@@ -26,8 +26,8 @@ class ChrStatsWidget(QtWidgets.QFrame):
         
         # Go through the player stats and build out a frame widget for each
         # Passing in "self" so stat widgets can all refresh together
+        skills = player.get_skills(byStat=True)
         for stat in player.get_stats():
-            skills = player.get_skills()
             stats_frame_v_layout.addWidget(StatWidget(stat, skills[stat.name]))
 
 
@@ -57,12 +57,12 @@ class StatWidget(QtWidgets.QFrame):
         self.font.setBold(False)
         
         self._build_stat_frame()
-        self._buildSaveFrame()
+        self._build_save_frame()
         
         for skill in skills:
             widget = SkillWidget(skill)
             self.main_layout.addWidget(widget)
-            self.Skills.append(widget)
+            self.skills.append(widget)
     
     def _build_stat_frame(self):
         # Set variables for size adjustment
@@ -86,7 +86,7 @@ class StatWidget(QtWidgets.QFrame):
         
         # Set up label including adding to layout
         stat_label = QtWidgets.QLabel(self)
-        stat_label.setText(self.Stat.getName())
+        stat_label.setText(self.stat.name)
         stat_label.setFont(self.font)
         stat_label.setLayoutDirection(QtCore.Qt.LeftToRight)
         stat_label.setAlignment(QtCore.Qt.AlignCenter)
@@ -114,7 +114,7 @@ class StatWidget(QtWidgets.QFrame):
         self.value_line_edit.setValidator(only_int)
         
         # Set value line edit value
-        self.value_line_edit.setText(str(self.Stat.get()))
+        self.value_line_edit.setText(str(self.stat.value))
         value_h_layout.addWidget(self.value_line_edit)
         stat_frame_v_layout.addLayout(value_h_layout)
         
@@ -133,14 +133,14 @@ class StatWidget(QtWidgets.QFrame):
         self.mod_line_edit.setReadOnly(True)
         
         # Set mod line edit value
-        self.mod_line_edit.setText(str(self.Stat.getModifier()))
+        self.mod_line_edit.setText(str(self.stat.get_modifier()))
         mod_h_layout.addWidget(self.mod_line_edit)
         stat_frame_v_layout.addLayout(mod_h_layout)
         
         # Connect value line edit function
         self.value_line_edit.editingFinished.connect(self.set_value)
     
-    def _buildSaveFrame(self):
+    def _build_save_frame(self):
         # Set variables for size adjustment
         prof_size = QtCore.QSize(10, 10)
         mod_size = QtCore.QSize(20, 20)
@@ -170,7 +170,7 @@ class StatWidget(QtWidgets.QFrame):
         self.prof_line_edit.setReadOnly(True)
         save_frame_h_layout.addWidget(self.prof_line_edit)
         
-        # Set up spacer to offset the expertise line edit from the sklls class.
+        # Set up spacer to offset the expertise line edit from the skills class.
         # This way everything lines up
         spacer = QtWidgets.QSpacerItem(prof_size.height(), prof_size.width())
         save_frame_h_layout.addSpacerItem(spacer)
@@ -198,17 +198,17 @@ class StatWidget(QtWidgets.QFrame):
         """Function to set value of stat as well as change modifier accordingly
         Can be set on the UI level"""
         input_value = self.value_line_edit.text()
-        if input_value != str(self.Stat.value):
-            self.Stat.set(input_value)
-            self.mod_line_edit.setText(str(self.Stat.getModifier()))
-            for skill in self.Skills:
-                skill.update()
+        if input_value != str(self.stat.value):
+            self.stat.set(input_value)
+            self.mod_line_edit.setText(str(self.stat.get_modifier()))
+            for skill in self.skills:
+                skill.update_mod()
     
     def refresh_ui(self):
         """refresh function that checks that stat widget number matches
         the corresponding stat in the player class."""
-        self.value_line_edit.setText(str(self.Stat.get()))
-        self.mod_line_edit.setText(str(self.Stat.getModifier()))
+        self.value_line_edit.setText(str(self.stat.value))
+        self.mod_line_edit.setText(str(self.stat.get_modifier()))
 
 
 class SkillWidget(QtWidgets.QFrame):
@@ -216,7 +216,7 @@ class SkillWidget(QtWidgets.QFrame):
         super(SkillWidget, self).__init__()
         self.skill = skill
         
-        # Set shared font paramaters
+        # Set shared font parameters
         font = QtGui.QFont()
         font.setWeight(50)
         font.setUnderline(False)
@@ -263,7 +263,7 @@ class SkillWidget(QtWidgets.QFrame):
         
         # Set up label including adding to layout
         skill_label = QtWidgets.QLabel()
-        skill_label.setText(skill.getName())
+        skill_label.setText(skill.name)
         skill_label.setLayoutDirection(QtCore.Qt.LeftToRight)
         skill_label.setAlignment(QtCore.Qt.AlignCenter)
         skill_label.setObjectName("skill_label")
@@ -283,4 +283,4 @@ class SkillWidget(QtWidgets.QFrame):
         self.update_mod()
     
     def update_mod(self):
-        self.mod_line_edit.setText(str(self.Skill.getModifier()))
+        self.mod_line_edit.setText(str(self.skill.get_modifier(3)))

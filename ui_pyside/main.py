@@ -2,7 +2,7 @@
 
 from PySide2 import QtCore, QtWidgets
 
-# Import of UI elemenets
+# Import of UI elements
 from dnd.ui_pyside.stats import ChrStatsWidget
 from dnd.ui_pyside.traits import Traits
 from dnd.ui_pyside.title import Title
@@ -28,7 +28,7 @@ class UI(QtWidgets.QMainWindow):
         self.central_v_layout = QtWidgets.QVBoxLayout(self.central_widget)
         self.central_v_layout.setObjectName("centralGLayout")
     
-        # Set up menu par paramaters
+        # Set up menu par parameters
         self.menu_bar = QtWidgets.QMenuBar(self)
         self.menu_bar.setGeometry(QtCore.QRect(0, 0, 836, 21))
         self.menu_bar.setObjectName("menu_bar")
@@ -37,7 +37,7 @@ class UI(QtWidgets.QMainWindow):
         self.drop_down_menu = QtWidgets.QMenu(self.menu_bar)
         self.drop_down_menu.setObjectName('drop_down_menu')
         
-        # Add menubar to Main Window
+        # Add menu bar to Main Window
         self.setMenuBar(self.menu_bar)
         
         # Build drop down item and connect to function

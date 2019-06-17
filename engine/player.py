@@ -57,9 +57,9 @@ class Player(Characters):
     def _build_stats(self):
         """Creates a Stat instance for each of the base stats."""
         self.str = Stat('Strength')
-        self.dex = Stat('Dextarity')
+        self.dex = Stat('Dexterity')
         self.con = Stat('Constitution')
-        self.int = Stat('Intelegence')
+        self.int = Stat('Intelligence')
         self.wis = Stat('Wisdom')
         self.cha = Stat('Charisma')
         
@@ -76,9 +76,9 @@ class Player(Characters):
         self.investigation = Skill('Investigation', self.int)
         self.medicine = Skill('Medicine', self.wis)
         self.nature = Skill('Nature', self.int)
-        self.perception = Skill('Perceptpion', self.wis)
+        self.perception = Skill('Perception', self.wis)
         self.performance = Skill('Performance', self.cha)
-        self.persuasion = Skill('Persuasuion', self.cha)
+        self.persuasion = Skill('Persuasion', self.cha)
         self.religion = Skill('Religion', self.int)
         self.slight_of_hand = Skill('Slight of Hand', self.dex)
         self.stealth = Skill('Stealth', self.dex)
@@ -89,9 +89,16 @@ class Player(Characters):
         return [self.str, self.dex, self.con,
                 self.int, self.wis, self.cha]
         
-    def get_skills(self):
-        """Returns a list of all the player skills. Be deault returns a list of all skills.
+    def get_skills(self, byStat):
+        """Returns a list of all the player skills. Be default returns a list of all skills.
         Can be filtered by associated stat."""
+        if byStat:
+            return {'Strength': [self.athletics], 'Dexterity': [self.acrobatics, self.slight_of_hand, self.stealth],
+                    'Constitution': [],
+                    'Intelligence': [self.arcana, self.history, self.investigation, self.nature, self.religion],
+                    'Wisdom': [self.animal_handling, self.insight, self.medicine, self.perception, self.survival],
+                    'Charisma': [self.deception, self.intimidation, self.performance, self.persuasion]}
+
         return [self.acrobatics, self.animal_handling, self.arcana,
                 self.athletics, self.deception, self.history, 
                 self.insight, self.intimidation, self.investigation, 

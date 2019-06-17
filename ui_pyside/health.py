@@ -12,7 +12,7 @@ class TabWidget(QtWidgets.QTabWidget):
         self.setGeometry(QtCore.QRect(170, 220, 351, 241))
         self.setObjectName("tabWidget")
         
-        self.healthTab = Widget(layoutType='H')
+        self.healthTab = Widget(layout_type='H')
         self.addTab(self.healthTab, 'Health')
         
         self.tempHealthWidget = InputWidgetV('Temp')
@@ -27,7 +27,7 @@ class TabWidget(QtWidgets.QTabWidget):
         self.healthControl.setParent(self.healthTab)
         self.healthTab.layout.addWidget(self.healthControl)
         
-        self.deathSaveTab = Widget(layoutType='V')
+        self.deathSaveTab = Widget(layout_type='V')
         self.addTab(self.deathSaveTab, "Death Save")
         
         self.setCurrentIndex(0)

@@ -122,35 +122,24 @@ class Inventory:
         if Item in self.items:
             self.items.remove(Item)
 
-class Item():
+
+class Item:
     def __init__(self):
-        self.name=''
-        self.count=0
-        self.description=''
-    
-    def setName(self,name):
-        self.name=name
-    
-    def getName(self):
-        return self.name
-    
-    def setDescription(self,description):
-        self.description=description
-    
-    def getDescription(self):
-        return self.rescription
+        self.name = ''
+        self.count = 0
+        self.description = ''
     
     def add(self, amount=0):
-        #adds an "amount" of healthPotions to inventory
-        if isinstance(amount,int):
+        # Adds an "amount" of healthPotions to inventory
+        if isinstance(amount, int):
             self.count+amount
             return True
         else:
             return False
     
     def remove(self, amount=0):
-        #Subtracts an "amount" of healthPotion
-        if isinstance(amount,int):
+        # Subtracts an "amount" of healthPotion
+        if isinstance(amount, int):
             self.count-amount
             return True
         else:
