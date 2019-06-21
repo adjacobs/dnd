@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<Player>
+   <spell_modifier name="name" test="test" value="10"/>
+   <abilities name="name" test="test" value="['Second Wind']"/>
+   <initiative name="name" test="test" value="4"/>
+   <chr_class name="name" test="test" value="{'Fighter': 5}"/>
+   <attack_bonus name="name" test="test" value="10"/>
+   <health name="name" test="test" value="100"/>
+   <prof_bonus name="name" test="test" value="3"/>
+   <background name="name" test="test" value="temp background"/>
+   <level name="name" test="test" value="5"/>
+   <spell_save name="name" test="test" value="10"/>
+   <stat name="Strength" proficiency="None" value="0">
+      <skill expert="False" name="athletics" proficiency="False"/>
+   </stat>
+   <stat name="Dexterity" proficiency="None" value="0">
+      <skill expert="False" name="acrobatics" proficiency="False"/>
+      <skill expert="False" name="slight_of_hand" proficiency="False"/>
+      <skill expert="False" name="stealth" proficiency="False"/>
+   </stat>
+   <stat name="Constitution" proficiency="None" value="0"/>
+   <stat name="Intelligence" proficiency="None" value="0">
+      <skill expert="False" name="investigation" proficiency="False"/>
+      <skill expert="False" name="history" proficiency="False"/>
+      <skill expert="False" name="arcana" proficiency="False"/>
+      <skill expert="False" name="nature" proficiency="False"/>
+      <skill expert="False" name="religion" proficiency="False"/>
+   </stat>
+   <stat name="Wisdom" proficiency="None" value="0">
+      <skill expert="False" name="perception" proficiency="False"/>
+      <skill expert="False" name="survival" proficiency="False"/>
+      <skill expert="False" name="animal_handling" proficiency="False"/>
+      <skill expert="False" name="insight" proficiency="False"/>
+      <skill expert="False" name="medicine" proficiency="False"/>
+   </stat>
+   <stat name="Charisma" proficiency="None" value="0">
+      <skill expert="False" name="deception" proficiency="False"/>
+      <skill expert="False" name="intimidation" proficiency="False"/>
+      <skill expert="False" name="performance" proficiency="False"/>
+      <skill expert="False" name="persuasion" proficiency="False"/>
+   </stat>
+</Player>
