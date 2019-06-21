@@ -5,8 +5,10 @@ Created on Jun 19, 2018
 """
 
 import logging
-import json
 import os
+import xml.etree.ElementTree as et
+from xml.dom import minidom
+
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -57,11 +59,13 @@ class Player(Characters):
         self.abilities = ['Second Wind']
         
         # Temp file name hardcoded for testing porpuse. Will need to be populated by code at some point
-        self.save_file = os.path.join(os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                                                   '_docs', 'saves', 'testSave.json'))
+        self.save_file_json = os.path.join(os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                                        '_docs', 'saves', 'testSave.json'))
+
+        self.save_file_xml = os.path.join(os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                                                       '_docs', 'saves', 'testSave.xml'))
 
         self._build_stats()
-        self._build_skills()
 
         logger.warning('Warning')
         logger.info('Info')
@@ -75,50 +79,25 @@ class Player(Characters):
         self.int = Stat('Intelligence')
         self.wis = Stat('Wisdom')
         self.cha = Stat('Charisma')
-        
-    def _build_skills(self):
-        """Builds out a class per skill. With the skill name and its corresponding stat as the variables."""
-        self.acrobatics = Skill('Acrobatics', self.dex)
-        self.animal_handling = Skill('Animal Handling', self.wis)
-        self.arcana = Skill('Arcana', self.int)
-        self.athletics = Skill('Athletics', self.str)
-        self.deception = Skill('Deception', self.cha)
-        self.history = Skill('History', self.int)
-        self.insight = Skill('Insight', self.wis)
-        self.intimidation = Skill('Intimidation', self.cha)
-        self.investigation = Skill('Investigation', self.int)
-        self.medicine = Skill('Medicine', self.wis)
-        self.nature = Skill('Nature', self.int)
-        self.perception = Skill('Perception', self.wis)
-        self.performance = Skill('Performance', self.cha)
-        self.persuasion = Skill('Persuasion', self.cha)
-        self.religion = Skill('Religion', self.int)
-        self.slight_of_hand = Skill('Slight of Hand', self.dex)
-        self.stealth = Skill('Stealth', self.dex)
-        self.survival = Skill('Survival', self.wis)
     
     def get_stats(self):
         """Returns a list of all the player stats."""
         return [self.str, self.dex, self.con,
                 self.int, self.wis, self.cha]
         
-    def get_skills(self, by_stat):
+    def get_skills(self, stat_name=None):
         """Returns a list of all the player skills. Be default returns a list of all skills.
         Can be filtered by associated stat."""
-        if by_stat:
-            return {'Strength': [self.athletics], 'Dexterity': [self.acrobatics, self.slight_of_hand, self.stealth],
-                    'Constitution': [],
-                    'Intelligence': [self.arcana, self.history, self.investigation, self.nature, self.religion],
-                    'Wisdom': [self.animal_handling, self.insight, self.medicine, self.perception, self.survival],
-                    'Charisma': [self.deception, self.intimidation, self.performance, self.persuasion]}
+        if stat_name:
+            for stat in self.get_stats():
+                if stat.name == stat_name:
+                    return stat.skills
+        else:
+            skills = {}
+            for stat in self.get_stats():
+                skills[stat.name] = stat.skills
+            return skills
 
-        return [self.acrobatics, self.animal_handling, self.arcana,
-                self.athletics, self.deception, self.history, 
-                self.insight, self.intimidation, self.investigation, 
-                self.medicine, self.nature, self.perception,
-                self.performance, self.persuasion, self.religion, 
-                self.slight_of_hand, self.stealth, self.survival]
-        
     def set_level(self, lvl):
         """Checks that "lvl" is and int and is 20 or under. If so sets the level
         logs and error and does nothing."""
@@ -180,15 +159,38 @@ class Player(Characters):
                      'abilities': self.abilities}
         
         return data_dict
-            
-    def _save(self):
-        data = self._gather_data()
-        with open(self.save_file, 'w') as out_file:  
-            json.dump(data, out_file, indent=1, sort_keys=True)
+
+    def _save_xml(self):
+        # Gathers up all the player data and writes it out to an xml file.
+        root = et.Element('Player')
+
+        # get basic class information and create a sub element of the rood for each item
+        for k, v in self._gather_data().items():
+            et.SubElement(root, k, value=str(v), name='name', test='test')
+
+        # goes through the stats and saves each one to the root
+        # in doing that each stat saves out its own skills
+        for stat in self.get_stats():
+            stat.save(root)
+
+        # builds out the string in a more user readable fashion
+        xmlstr = minidom.parseString(et.tostring(root, 'utf-8')).toprettyxml(indent="   ")
+
+        # opens up the xml file and saves the string
+        with open(self.save_file_xml, 'w') as f:
+            f.write(xmlstr)
+
+    def _load_xml(self):
+        tree = et.parse(self.save_file_xml)
+        root = tree.getroot()
+        for element in root:
+            print(element)
+            print(element.tag, element.items())
 
     def _load(self, file_path):
         if os.path.exists(file_path):
             pass
+        # testing change
         else:
             logger.error('%s does not exits.' % file_path)
             raise Exception()
@@ -199,10 +201,14 @@ class Player(Characters):
 
 
 class Stat:
-    def __init__(self, name, value=0, prof=False):
+    # TODO: try to get rid of the default values here
+    def __init__(self, name, value=0, prof=None):
         self.name = name
         self.value = value
         self.prof = prof
+        self.skills = {}
+
+        self._set_skills()
 
     def set(self, val):
         """sets stat value"""
@@ -228,33 +234,42 @@ class Stat:
                 
         return modifier
 
+    def _set_skills(self):
+        # sets the skills for that the stat controls based on a hard coded dictionary
+        skills_dict = {'Strength': ['athletics'],
+                       'Dexterity': ['acrobatics', 'slight_of_hand', 'stealth'],
+                       'Constitution': [],
+                       'Intelligence': ['arcana', 'history', 'investigation', 'nature', 'religion'],
+                       'Wisdom': ['animal_handling', 'insight', 'medicine', 'perception', 'survival'],
+                       'Charisma': ['deception', 'intimidation', 'performance', 'persuasion']}
+
+        for skill in skills_dict[self.name]:
+            self.skills[skill] = Skill(skill)
+
+    def save(self, root):
+        # save out stat information
+        stat = et.SubElement(root, 'stat',  name=self.name, value=str(self.value), proficiency=str(self.prof))
+
+        # goes through the stats and saves out each one associated to the class
+        for s in self.skills.values():
+            s.save(stat)
 
 class Skill:
     """Container for skills. Takes in the corresponding stat in order to return proper values."""
-    def __init__(self, name, stat):
+    def __init__(self, name):
         self.name = name
-        self.stat = stat
         self.prof = False
         self.expert = False
-    
-    def get_modifier(self, prof_bonus):
+
+    # TODO: this function feels messy. Think of a cleaner way to get the skill modifier
+    def get_modifier(self, prof_bonus, stat_modifier):
         """Figures out the modifier by getting the base stat modifier and adding
         any prof or expert modifiers."""
-        modifier = self.stat.get_modifier()
         if self.prof:
-            modifier += prof_bonus
+            stat_modifier += prof_bonus
             if self.expert:
-                modifier += prof_bonus
-        return modifier
-    
-    def get_stat(self):
-        """Returns the stat name associated with the skill."""
-        return self.stat.getName()
-    
-    def set_prof(self, prof):
-        """Sets if skill is proficient"""
-        self.prof = prof
-    
-    def set_expert(self, expert):
-        """Sets if skill is expert."""
-        self.expert = expert
+                stat_modifier += prof_bonus
+        return stat_modifier
+
+    def save(self, root):
+        et.SubElement(root, 'skill', name=self.name, proficiency=str(self.prof), expert=str(self.expert))
