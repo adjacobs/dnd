@@ -1,15 +1,12 @@
 <?xml version="1.0" ?>
 <Player>
-   <spell_modifier name="name" test="test" value="10"/>
-   <abilities name="name" test="test" value="['Second Wind']"/>
-   <initiative name="name" test="test" value="4"/>
-   <chr_class name="name" test="test" value="{'Fighter': 5}"/>
-   <attack_bonus name="name" test="test" value="10"/>
-   <health name="name" test="test" value="100"/>
-   <prof_bonus name="name" test="test" value="3"/>
-   <background name="name" test="test" value="temp background"/>
-   <level name="name" test="test" value="5"/>
-   <spell_save name="name" test="test" value="10"/>
+   <base name="Double Dragon"/>
+   <base race="Goliath"/>
+   <base level="10"/>
+   <bese chr_class="Fighter" level="10"/>
+   <base health="107" temp_health="0"/>
+   <base background="Pit Fighter"/>
+   <class Fighter="9" wizard="1"/>
    <stat name="Strength" proficiency="None" value="0">
       <skill expert="False" name="athletics" proficiency="False"/>
    </stat>
