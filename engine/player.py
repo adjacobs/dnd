@@ -150,6 +150,7 @@ class Player:
         self.chr_class = root.find('base').get('chr_class')
         print(self.chr_class)
 
+    # TODO:still needs more testing to make sure everything is loading properly.
     def _load_xml(self):
         logger.debug('Testing load function')
         tree = et.parse(self.save_file_xml)
