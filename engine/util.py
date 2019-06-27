@@ -18,3 +18,11 @@ def roll_stats(number_count: int, rolls: int, die_type = 6):
         stats.append({sum(sorted(rolls)[1:]): sorted(rolls)[1:]})
     
     return stats
+
+
+def str_to_bool(string):
+    """Converts any string of 0 none or false to bool False else returns True"""
+    false_list = ['0', 'none', 'false']
+    if string.lower() in false_list:
+        return False
+    return True
