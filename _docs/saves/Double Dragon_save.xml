@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<Player>
+   <base name="Double Dragon"/>
+   <base race="Goliath"/>
+   <base level="10"/>
+   <base health="107" temp_health="0"/>
+   <base background="Pit Fighter"/>
+   <base chr_class="Wizard" level="1"/>
+   <base chr_class="Fighter" level="9"/>
+   <stats name="constitution" proficiency="True" value="16"/>
+   <stats name="dexterity" proficiency="False" value="11">
+      <skills expert="False" name="acrobatics" proficiency="False"/>
+      <skills expert="False" name="slight_of_hand" proficiency="False"/>
+      <skills expert="False" name="stealth" proficiency="True"/>
+   </stats>
+   <stats name="charisma" proficiency="False" value="12">
+      <skills expert="False" name="deception" proficiency="True"/>
+      <skills expert="False" name="intimidation" proficiency="True"/>
+      <skills expert="False" name="performance" proficiency="False"/>
+      <skills expert="False" name="persuasion" proficiency="False"/>
+   </stats>
+   <stats name="strength" proficiency="True" value="20">
+      <skills expert="False" name="athletics" proficiency="True"/>
+   </stats>
+   <stats name="intelligence" proficiency="None" value="10">
+      <skills expert="False" name="investigation" proficiency="False"/>
+      <skills expert="False" name="history" proficiency="True"/>
+      <skills expert="False" name="arcana" proficiency="False"/>
+      <skills expert="False" name="nature" proficiency="False"/>
+      <skills expert="False" name="religion" proficiency="False"/>
+   </stats>
+   <stats name="wisdom" proficiency="None" value="15">
+      <skills expert="False" name="perception" proficiency="False"/>
+      <skills expert="False" name="survival" proficiency="False"/>
+      <skills expert="False" name="animal_handling" proficiency="False"/>
+      <skills expert="False" name="insight" proficiency="False"/>
+      <skills expert="False" name="medicine" proficiency="False"/>
+   </stats>
+</Player>
