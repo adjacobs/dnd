@@ -1,0 +1,15 @@
+<?xml version="1.0" ?>
+<Fighter>
+   <base>
+      <hit_points hit_dice="1d 10 per fighter level" level_1="10 + constitution modifier"/>
+      <proficiencies armor="all armor, shields" weapons="simple, martial" tools="none" saving_throws="strength, constitution"/>
+      <skills two="acrobatics, animal handling, history, insight, intimidation, perception, survival"/>
+   </base>
+   <level>
+      <one features="'fighting style, second wind"/>
+      <two features="action surge"/>
+      <three features="martial archetype"/>
+      <four features="asi or feat"/>
+      <five features="'extra attack"/>
+   </level>
+</Fighter>

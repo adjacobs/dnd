@@ -23,6 +23,7 @@ if not logger.handlers:
     log_handle.setFormatter(logging.Formatter('%(levelname)s:%(name)s:%(message)s'))
     logger.addHandler(log_handle)
 
+folder_root = os.path.dirname(os.path.dirname(__file__))
 
 class Player:
 
@@ -61,6 +62,29 @@ class Player:
         # Temp file name hardcoded for testing porpuse. Will need to be populated by code at some point
         return os.path.join(os.path.join(os.path.dirname(os.path.dirname(__file__)),
                             '_docs', 'saves', 'Double Dragon_save_temp.xml'))
+
+    # validates new items for player, like classes, features, spells
+    def _validate(self, type, feature):
+        # check that feature type is valid
+        if os.path.exists(os.path.join(folder_root, type))
+
+
+    def level_up(self, cls):
+        # Check if level 0 if so call different function
+        if not self.level:
+            logger.warning('Player is currently level 0 setting up first level.')
+            return None
+        # validate that cls is valid
+        # Check if player already has class
+        if cls in self.chr_class.keys():
+            pass
+        # if primary, add to primary class look up cls xml and return features
+        # if secondary, check if already level in class
+        # if so add level to secondary cls look up cls xml and return features
+        # if not check if player meets cls requirements
+        # if they do add class to player and return features
+        # if not log issue and return none
+        pass
 
     def get_skills(self, stat_name=None):
         """Returns a list of all the player skill classes. By default returns a list of all skills.

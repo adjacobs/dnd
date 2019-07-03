@@ -4,7 +4,6 @@ class Inventory:
         self.silver = 0
         self.gold = 0
         self.platinum = 0
-        self.healthPotions = 0
         self.items = []
         self.weapons = []
 
@@ -21,6 +20,8 @@ class Weapon:
         self.damage_type = None
         self.weight = 0
         self.properties = []
+        self.spells = []
+        self.charges = 0
 
 
 class Item:
