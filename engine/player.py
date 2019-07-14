@@ -9,7 +9,7 @@ import os
 import xml.etree.ElementTree as et
 from xml.dom import minidom
 
-from dnd.engine.util import str_to_bool
+from engine.util import str_to_bool
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)

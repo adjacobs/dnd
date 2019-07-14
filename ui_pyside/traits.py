@@ -3,7 +3,7 @@ Created on Apr 4, 2019
 
 @author: ajacobs
 '''
-from dnd.ui_pyside.util import *
+from ui_pyside.util import *
 
 
 class Traits(FrameWidget):
