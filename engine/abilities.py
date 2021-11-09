@@ -4,13 +4,16 @@ Created on Jun 19, 2018
 @author: ajacobs
 """
 
-
 class Ability:
     def __init__(self, name):
         self.name = name
         self.description = ''
     
     def set_name(self, name):
+        """
+
+        @param name:
+        """
         self.name = name
     
     def get_name(self):
