@@ -25,18 +25,25 @@ if not logger.handlers:
 
 folder_root = os.path.dirname(os.path.dirname(__file__))
 
-class Player:
+skills_dict = {'strength': ['athletics'],
+               'dexterity': ['acrobatics', 'slight_of_hand', 'stealth'],
+               'constitution': [],
+               'intelligence': ['arcana', 'history', 'investigation', 'nature', 'religion'],
+               'wisdom': ['animal_handling', 'insight', 'medicine', 'perception', 'survival'],
+               'charisma': ['deception', 'intimidation', 'performance', 'persuasion']}
 
-    def __init__(self):
-        super(Player, self).__init__()
+class Player:
+    def __init__(self, load=''):
         self.name = ''
         self.race = ''
         self.level = 0
-        self.health = 0
+        self.health = (0, 0)
         self.temp_health = 0
-        self.chr_class = {}
+        self.speed = 0
+        self.chr_class = []
         self.background = None
-        self.stats = self._build_stats()
+        self._stats = [Stat('strength'), Stat('dexterity'), Stat('constitution'),
+                       Stat('intelligence'), Stat('wisdom'), Stat('charisma')]
 
         # figures out proficiency, initiative, and armor class based on the players level, feats, and equipment.
         self.prof_bonus = self.get_prof_bonus()
@@ -48,14 +55,19 @@ class Player:
         logger.debug('Debug')
 
         # TODO:remove once class is done being tested.
-        self._load_xml()
+        if load:
+            self._load_xml()
 
-    @staticmethod
-    def _build_stats():
-        """Creates a Stat instance for each of the base stats."""
-        return {'strength': Stat('strength'), 'dexterity': Stat('dexterity'),
-                'constitution': Stat('constitution'), 'intelligence': Stat('intelligence'),
-                'wisdom': Stat('wisdom'), 'charisma': Stat('charisma')}
+    def set_stats(self, stat, value):
+        """
+        Sets the stat value
+        :param stat: String
+        :param value: int
+        """
+        # Check that stat exists
+        for s in self.stats:
+            if s.name == stat:
+                s.set_value(value)
 
     @staticmethod
     def _get_xml_file():
@@ -66,17 +78,18 @@ class Player:
     # validates new items for player, like classes, features, spells
     def _validate(self, type, feature):
         # check that feature type is valid
-        if os.path.exists(os.path.join(folder_root, type))
+        if os.path.exists(os.path.join(folder_root, type)):
+            pass
 
-
-    def level_up(self, cls):
+    def level_up(self, chr_class):
         # Check if level 0 if so call different function
         if not self.level:
             logger.warning('Player is currently level 0 setting up first level.')
             return None
+
         # validate that cls is valid
         # Check if player already has class
-        if cls in self.chr_class.keys():
+        if chr_class in self.chr_class.keys():
             pass
         # if primary, add to primary class look up cls xml and return features
         # if secondary, check if already level in class
@@ -86,38 +99,58 @@ class Player:
         # if not log issue and return none
         pass
 
-    def get_skills(self, stat_name=None):
+    @property
+    def stats(self):
+        """
+        Returns list ot stat objects
+        @return:
+        """
+        return self._stats
+
+    def get_stat_by_name(self, stat):
+        """
+        Returns stat class
+        @param stat: String
+        @return: stat class obj
+        """
+        for s in self.stats:
+            if s.name == stat:
+                return s
+
+    def get_skills(self, stat=None):
         """Returns a list of all the player skill classes. By default returns a list of all skills.
-        Can be filtered by associated stat."""
+        Can be filtered by associated stat.
+        @param stat: String
+        @return: List of Skills
+        """
         logger.debug('Getting skills')
-        if stat_name:
-            if stat_name in self.stats.keys():
-                return self.stats[stat_name].skills
-            else:
-                logger.error('%s is not a valid stat.' % stat_name)
+        stat = self.get_stat(stat)
+        if stat:
+            return stat.skills
         else:
-            skills = {}
-            for stat in self.stats.values():
-                skills[stat.name] = stat.skills
+            skills = []
+            for stat in self.stats:
+                skills.append(stat.skills)
             return skills
     
     def get_initiative(self):
         """Returns what the initiative is based on dexterity"""
         logger.debug('Setting initiative')
         # TODO: Needs extra functions to search for feats or anything else that may change the initiative
-        return self.stats['dexterity'].get_modifier()
+        return self.get_stat_by_name('dexterity').get_modifier()
     
     def get_prof_bonus(self):
-        """Returns players proficiency bonus based on their level."""
+        """Returns players proficiency bonus based on their level. If prof not set by end of for loop return 6"""
         logger.debug('Setting proficiency bonus')
         levels = [5, 9, 12, 16]
         for lvl in levels:
             if self.level < lvl:
                 return levels.index(lvl)+2
+        return 6
 
     def get_attack_bonus(self, stat, proficiency=False):
         """Gets the stat attack bonus. Works for spell or weapon. Adds proficiency if called"""
-        logger.debug("Getting attack bonus for %s" % stat)
+        logger.debug(f"Getting attack bonus for {stat}")
         # TODO: May need to add functionality to add any additional weapon or other bonus
         if stat in self.stats.keys():
             if proficiency:
@@ -205,7 +238,7 @@ class Player:
             self.stats[name].value = int(stat.get('value'))
             self.stats[name].prof = str_to_bool(stat.get('proficiency'))
 
-        # for each stat goes over the skills and builds them out.
+            # for each stat goes over the skills and builds them out.
             for skill in stat.iter('skills'):
                 logger.debug('Testing skill loaders')
                 self.stats[name].skills[skill.get('name')].prof = str_to_bool(skill.get('proficiency'))
@@ -222,9 +255,30 @@ class Stat:
         self.name = name
         self.value = value
         self.prof = prof
-        self.skills = {}
+        self._skills = []
 
         self._set_skills()
+
+    def __str__(self):
+        """Return `str(self)`."""
+        if self.prof:
+            prof = 'you are'
+        else:
+            prof = 'you are not'
+        return f'{self.name} has a value of {self.value}, and {prof} proficient.'
+
+    def __repr__(self):
+        return f'Stat {self.name} value {self.value}.'
+
+    def set_value(self, value):
+        """
+        Try to set the value if it cant error out.
+        @param value: Int
+        """
+        try:
+            self.value = int(value)
+        except ValueError as e:
+            logger.error(f'{value} can not be converted into an int.')
 
     def get_modifier(self):
         """returns stat modifier proficiency"""
@@ -243,16 +297,27 @@ class Stat:
         return modifier
 
     def _set_skills(self):
-        # sets the skills for that the stat controls based on a hard coded dictionary
-        skills_dict = {'strength': ['athletics'],
-                       'dexterity': ['acrobatics', 'slight_of_hand', 'stealth'],
-                       'constitution': [],
-                       'intelligence': ['arcana', 'history', 'investigation', 'nature', 'religion'],
-                       'wisdom': ['animal_handling', 'insight', 'medicine', 'perception', 'survival'],
-                       'charisma': ['deception', 'intimidation', 'performance', 'persuasion']}
-
+        # Loop over list of skills that match stat and set the class
         for skill in skills_dict[self.name]:
-            self.skills[skill] = Skill(skill)
+            self._skills.append(Skill(name=skill, parent_stat=self))
+
+    @property
+    def skills(self):
+        """
+        Returns the list of skills
+        @return:
+        """
+        return self._skills
+
+    def get_skill_by_name(self, skill):
+        """
+        @param skill: String
+        @return:Stat Class
+        """
+        for s in self.skills:
+            if s.name == skill:
+                return s
+        return None
 
     def save(self, root):
         # save out stat information
@@ -265,10 +330,23 @@ class Stat:
 
 class Skill:
     """Container for skills. Takes in the corresponding stat in order to return proper values."""
-    def __init__(self, name):
+    def __init__(self, name, parent_stat):
         self.name = name
         self.prof = False
         self.expert = False
+        self.parent_stat = parent_stat
+
+    def __str__(self):
+        """Return `str(self)`."""
+        if self.expert:
+            return f'{self.name} has a value of {self.parent_stat.value}, your proficient and have expertise.'
+        elif self.prof:
+            return f'{self.name} has a value of {self.parent_stat.value}, your proficient.'
+        else:
+            return f'{self.name} has a value of {self.parent_stat.value}, your not proficient'
+
+    def __repr__(self):
+        return f'Stat {self.name} value {self.parent_stat.value}.'
 
     # TODO: this function feels messy. Think of a cleaner way to get the skill modifier
     def get_modifier(self, prof_bonus, stat_modifier):
@@ -279,6 +357,13 @@ class Skill:
             if self.expert:
                 stat_modifier += prof_bonus
         return stat_modifier
+
+    def get_value(self):
+        """
+        Return value of stat with prof and expertise included
+        @return:
+        """
+        print(self.parent_stat.value)
 
     def save(self, root):
         et.SubElement(root, 'skills', name=self.name, proficiency=str(self.prof), expert=str(self.expert))
