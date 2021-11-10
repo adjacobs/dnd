@@ -49,24 +49,6 @@ class Player:
         self._stats = [Stat('strength'), Stat('dexterity'), Stat('constitution'),
                        Stat('intelligence'), Stat('wisdom'), Stat('charisma')]
 
-        # figures out proficiency, initiative, and armor class based on the players level, feats, and equipment.
-        self.prof_bonus = self.get_prof_bonus()
-        self.initiative = self.get_initiative()
-        # self.ac = self.get_ac()
-
-    def set_stats(self, stat, value):
-        """
-        @param stat: String
-        @param value:
-        @return:
-        """
-        # Check that stat exists
-        stat = self.get_stat_by_name(stat)
-        if stat:
-            stat.value = value
-        else:
-            logger.warning(f'{stat} is not a valid choice.')
-
     def level_up(self, chr_class):
         # Check if level 0 if so call different function
         if not self.level:
@@ -99,7 +81,7 @@ class Player:
         @param stat: String
         @return: stat class obj
         """
-        logger.debug(f'Getting {stat}')
+        logger.debug(f'Getting stat: {stat}')
         for s in self.stats:
             if s.name == stat:
                 return s
@@ -117,21 +99,28 @@ class Player:
             skill = stat.get_skill_by_name(skill)
             if stat:
                 return skill
-        logger.warning(f'Could not find {skill}')
+        logger.warning(f'Could not find skill: {skill}')
         return None
 
-    def get_skill_by_stat(self, stat):
+    def get_skill_by_stat(self, stat_name):
         """
         Gets a list of all skills from given stat
-        @param stat:String
+        @param stat_name: String name of stat or all if you want all skills
         @return:List
         """
-        logger.debug(f'Getting skills for {stat}')
-        stat = self.get_stat_by_name(stat)
-        if stat:
-            return stat.skills
+        logger.debug(f'Getting skills: {stat_name}')
+        # Check if getting all stats
+        if stat_name == 'all':
+            skills = []
+            for s in self.stats:
+                skills.append(s.skills)
+            return skills
+        # Check if stat was found.
+        elif self.get_stat_by_name(stat_name):
+            return self.get_stat_by_name(stat_name)
+        # Return empty list
         else:
-            logger.warning(f'Could not find {stat}')
+            logger.warning(f'Could not find stat: {stat_name}')
             return []
     
     def get_initiative(self):
@@ -149,39 +138,64 @@ class Player:
                 return levels.index(lvl)+2
         return 6
 
-    def get_attack_bonus(self, stat, proficiency=False):
+    def get_attack_bonus(self, stat_name):
         """Gets the stat attack bonus. Works for spell or weapon. Adds proficiency if called"""
-        logger.debug(f"Getting attack bonus for {stat}")
-        # TODO: May need to add functionality to add any additional weapon or other bonus
-        if stat in self.stats.keys():
-            if proficiency:
-                return self.stats[stat].get_modifier() + self.get_prof_bonus()
-            else:
-                return self.stats[stat].get_modifier()
-    
-    def get_spell_save_dc(self, stat):
-        """Returns the spell save DC based on the given stat"""
-        logger.debug('Getting spell save DC')
-        if stat in self.stats.keys():
-            return self.stats[stat].get_modifier() + self.get_prof_bonus() + 8
-        else:
-            logger.error('%s is not a valid stat' % stat)
+        logger.debug(f"Getting attack bonus for {stat_name}")
+        stat = self.get_stat_by_name(stat_name)
+        if not stat:
+            logger.error(f'Could not find stat:{stat_name}')
             return None
+        else:
+            # TODO: Add functionality to look for additives from items and spells
+            if stat.prof:
+                return self.get_prof_bonus() + stat.get_modifier()
+            else:
+                return stat.get_modifier()
+    
+    def get_spell_save_dc(self, stat_name):
+        """
+        Returns the spell save DC based on the given stat
+        @param stat_name: String
+        @return: Int or None
+        """
+        logger.debug(f'Getting spell save DC for stat{stat_name}')
+        stat = self.get_stat_by_name(stat_name)
+        if not stat:
+            logger.warning(f'Could not find stat:{stat_name}')
+            return None
+        else:
+            return stat.get_modifier() + self.get_prof_bonus() + 8
 
-    def get_passive_perception(self):
+    @property
+    def passive_perception(self):
         """Returns the passive wisdom which is 10 + Perception bonus"""
-        stat = self.stats['wisdom']
-        return 10 + stat.skills['perception'].get_modifier(self.prof_bonus, stat.get_modifier())
+        skill = self.get_skill_by_name('perception')
+        return 10 + skill.get_bonus(self.get_prof_bonus())
 
-    def get_passive_investigation(self):
+    @property
+    def passive_investigation(self):
         """Returns the passive intelligence which is 10 + Investigation bonus"""
-        stat = self.stats['intelligence']
-        return 10 + stat.skills['investigation'].get_modifier(self.prof_bonus, stat.get_modifier())
+        skill = self.get_skill_by_name('intelligence')
+        return 10 + skill.get_bonus(self.get_prof_bonus())
 
-    def get_passive_insight(self):
+    @property
+    def passive_insight(self):
         """Returns the passive wisdom which is 10 + Insight bonus"""
-        stat = self.stats['wisdom']
-        return 10 + stat.skills['insight'].get_modifier(self.prof_bonus, stat.get_modifier())
+        skill = self.get_skill_by_name('wisdom')
+        return 10 + skill.get_bonus(self.get_prof_bonus())
+
+    def set_stats(self, stat, value):
+        """
+        @param stat: String
+        @param value: Int
+        @return:
+        """
+        # Check that stat exists
+        stat = self.get_stat_by_name(stat)
+        if stat:
+            stat.value = value
+        else:
+            logger.warning(f'{stat} is not a valid choice.')
 
     def _save_xml(self):
         """Saves out the class variables, stats, and skills to the xml file."""
@@ -211,14 +225,13 @@ class Player:
 
 
 class Stat:
-    # TODO: try to get rid of the default values here
     def __init__(self, name, value=0, prof=False):
         self.name = name
         self._value = value
         self._prof = prof
-        self._skills = []
-
-        self._set_skills()
+        self._skills =[]
+        for skill in skills_dict[self.name]:
+            self._skills.append(Skill(name=skill, parent_stat=self))
 
     def __str__(self):
         """Return `str(self)`."""
@@ -268,7 +281,8 @@ class Stat:
         except ValueError as e:
             logger.error(f'{value} can not be converted into an int.')
 
-    def get_modifier(self):
+    @property
+    def modifier(self):
         """returns stat modifier proficiency"""
         # If value is over 10 subtracts 10 and divides by 2 to give you the modifier
         if self.value >= 10:
@@ -281,13 +295,7 @@ class Stat:
                 modifier = int(-(5-(self.value-1)/2))
             else:
                 modifier = int(-(5-(self.value/2)))
-                
         return modifier
-
-    def _set_skills(self):
-        # Loop over list of skills that match stat and set the class
-        for skill in skills_dict[self.name]:
-            self._skills.append(Skill(name=skill, parent_stat=self))
 
     @property
     def skills(self):
@@ -305,6 +313,7 @@ class Stat:
         for s in self.skills:
             if s.name == skill:
                 return s
+
         return None
 
     def save(self, root):
@@ -370,22 +379,15 @@ class Skill:
         """
         self._expert = value
 
-    # TODO: this function feels messy. Think of a cleaner way to get the skill modifier
-    def get_modifier(self, prof_bonus, stat_modifier):
+    def get_bonus(self, prof_bonus=0):
         """Figures out the modifier by getting the base stat modifier and adding
         any prof or expert modifiers."""
+        bonus = self.parent_stat.get_modifier()
         if self.prof:
-            stat_modifier += prof_bonus
+            bonus += prof_bonus
             if self.expert:
-                stat_modifier += prof_bonus
-        return stat_modifier
-
-    def get_value(self):
-        """
-        Return value of stat with prof and expertise included
-        @return:
-        """
-        print(self.parent_stat.value)
+                bonus += prof_bonus
+        return bonus
 
     def save(self, root):
         eT.SubElement(root, 'skills', name=self.name, proficiency=str(self.prof), expert=str(self.expert))

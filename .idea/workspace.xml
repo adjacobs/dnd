@@ -4,11 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07c4cbae-ba21-477b-b9cb-ceeab8813e8f" name="Changes" comment="adding env">
-      <change beforePath="$PROJECT_DIR$/.idea/dnd.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dnd.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="07c4cbae-ba21-477b-b9cb-ceeab8813e8f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/abilities.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/abilities.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/engine/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/player.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -69,7 +66,14 @@
       <option name="project" value="LOCAL" />
       <updated>1635972748948</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="First pass on update to dnd player tool after being away for a year.">
+      <created>1636475659410</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1636475659410</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -86,6 +90,7 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="adding env" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding env" />
+    <MESSAGE value="First pass on update to dnd player tool after being away for a year." />
+    <option name="LAST_COMMIT_MESSAGE" value="First pass on update to dnd player tool after being away for a year." />
   </component>
 </project>
