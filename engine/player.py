@@ -6,7 +6,7 @@ Created on Jun 19, 2018
 
 import logging
 import os
-import xml.etree.ElementTree as et
+import xml.etree.ElementTree as eT
 from xml.dom import minidom
 
 from engine.util import str_to_bool
@@ -32,15 +32,19 @@ skills_dict = {'strength': ['athletics'],
                'wisdom': ['animal_handling', 'insight', 'medicine', 'perception', 'survival'],
                'charisma': ['deception', 'intimidation', 'performance', 'persuasion']}
 
+
 class Player:
-    def __init__(self, load=''):
+    def __init__(self):
         self.name = ''
         self.race = ''
         self.level = 0
         self.health = (0, 0)
         self.temp_health = 0
         self.speed = 0
-        self.chr_class = []
+        self.inspiration = False
+        self.defenses = []
+        self.conditions = []
+        self.classes = []
         self.background = None
         self._stats = [Stat('strength'), Stat('dexterity'), Stat('constitution'),
                        Stat('intelligence'), Stat('wisdom'), Stat('charisma')]
@@ -50,36 +54,18 @@ class Player:
         self.initiative = self.get_initiative()
         # self.ac = self.get_ac()
 
-        logger.warning('Warning')
-        logger.info('Info')
-        logger.debug('Debug')
-
-        # TODO:remove once class is done being tested.
-        if load:
-            self._load_xml()
-
     def set_stats(self, stat, value):
         """
-        Sets the stat value
-        :param stat: String
-        :param value: int
+        @param stat: String
+        @param value:
+        @return:
         """
         # Check that stat exists
-        for s in self.stats:
-            if s.name == stat:
-                s.set_value(value)
-
-    @staticmethod
-    def _get_xml_file():
-        # Temp file name hardcoded for testing porpuse. Will need to be populated by code at some point
-        return os.path.join(os.path.join(os.path.dirname(os.path.dirname(__file__)),
-                            '_docs', 'saves', 'Double Dragon_save_temp.xml'))
-
-    # validates new items for player, like classes, features, spells
-    def _validate(self, type, feature):
-        # check that feature type is valid
-        if os.path.exists(os.path.join(folder_root, type)):
-            pass
+        stat = self.get_stat_by_name(stat)
+        if stat:
+            stat.value = value
+        else:
+            logger.warning(f'{stat} is not a valid choice.')
 
     def level_up(self, chr_class):
         # Check if level 0 if so call different function
@@ -89,7 +75,7 @@ class Player:
 
         # validate that cls is valid
         # Check if player already has class
-        if chr_class in self.chr_class.keys():
+        if chr_class in self.classes:
             pass
         # if primary, add to primary class look up cls xml and return features
         # if secondary, check if already level in class
@@ -113,25 +99,40 @@ class Player:
         @param stat: String
         @return: stat class obj
         """
+        logger.debug(f'Getting {stat}')
         for s in self.stats:
             if s.name == stat:
                 return s
+            elif s.name.startswith(stat):
+                return s
 
-    def get_skills(self, stat=None):
+    def get_skill_by_name(self, skill):
         """Returns a list of all the player skill classes. By default returns a list of all skills.
         Can be filtered by associated stat.
-        @param stat: String
-        @return: List of Skills
+        @param skill: String
+        @return: skill object
         """
-        logger.debug('Getting skills')
-        stat = self.get_stat(stat)
+        logger.debug(f'Getting {skill}')
+        for stat in self.stats:
+            skill = stat.get_skill_by_name(skill)
+            if stat:
+                return skill
+        logger.warning(f'Could not find {skill}')
+        return None
+
+    def get_skill_by_stat(self, stat):
+        """
+        Gets a list of all skills from given stat
+        @param stat:String
+        @return:List
+        """
+        logger.debug(f'Getting skills for {stat}')
+        stat = self.get_stat_by_name(stat)
         if stat:
             return stat.skills
         else:
-            skills = []
-            for stat in self.stats:
-                skills.append(stat.skills)
-            return skills
+            logger.warning(f'Could not find {stat}')
+            return []
     
     def get_initiative(self):
         """Returns what the initiative is based on dexterity"""
@@ -186,15 +187,15 @@ class Player:
         """Saves out the class variables, stats, and skills to the xml file."""
         logger.debug('Saving out file')
         # Gathers up all the player data and writes it out to an xml file.
-        root = et.Element('Player')
+        root = eT.Element('Player')
 
         # get basic class information and create a sub element of the rood for each item
-        et.SubElement(root, 'base', name=str(self.name), race=str(self.race), level=str(self.level),
+        eT.SubElement(root, 'base', name=str(self.name), race=str(self.race), level=str(self.level),
                       health=str(self.health), temp_health=str(self.temp_health), background=str(self.background))
 
         # goes over each item in the chr_class dict and builds out a sub element for them
         for cls, lvl in self.chr_class.items():
-            et.SubElement(root, 'chr_class', name=cls, level=lvl)
+            eT.SubElement(root, 'chr_class', name=cls, level=lvl)
 
         # goes through the stats and saves each one to the root
         # in doing that each stat saves out its own skills
@@ -202,59 +203,19 @@ class Player:
             stat.save(root)
 
         # builds out the string in a more user readable fashion
-        xml_str = minidom.parseString(et.tostring(root, 'utf-8')).toprettyxml(indent="   ")
+        xml_str = minidom.parseString(eT.tostring(root, 'utf-8')).toprettyxml(indent="   ")
 
         # opens up the xml file and saves the string
         with open(self._get_xml_file(), 'w') as f:
             f.write(xml_str)
-
-    # TODO:still needs more testing to make sure everything is loading properly.
-    def _load_xml(self):
-        """
-        loads the xml up provided by the set_xml function and sets the class variables,
-        builds out the stat classes, and the skill classes
-        """
-        logger.debug('Loading xml file')
-        tree = et.parse(self._get_xml_file())
-        root = tree.getroot()
-
-        # goes over base attributes and assigns them to class attribute
-        base_var = root.find('base')
-        self.name = base_var.get('name')
-        self.race = base_var.get('race')
-        self.level = int(base_var.get('level'))
-        self.health = int(base_var.get('health'))
-        self.temp_health = int(base_var.get('temp_health'))
-        self.background = base_var.get('background')
-
-        # goes over each chr_class item in the xml and sets the self.chr_class dict
-        for cls in root.iter('chr_class'):
-            self.chr_class[cls.get('name')] = cls.get('level')
-
-        # goes over the stats section of the xml file and builds of the stat classes and adds them to the class var.
-        for stat in root.iter('stats'):
-            logger.debug('Testing stat loaders')
-            name = stat.get('name')
-            self.stats[name].value = int(stat.get('value'))
-            self.stats[name].prof = str_to_bool(stat.get('proficiency'))
-
-            # for each stat goes over the skills and builds them out.
-            for skill in stat.iter('skills'):
-                logger.debug('Testing skill loaders')
-                self.stats[name].skills[skill.get('name')].prof = str_to_bool(skill.get('proficiency'))
-                self.stats[name].skills[skill.get('name')].expert = str_to_bool(skill.get('expert'))
-
-        # once class vars are set, stats set and skills set calls the functions that sets some other class var
-        self.prof_bonus = self.get_prof_bonus()
-        self.initiative = self.get_initiative()
 
 
 class Stat:
     # TODO: try to get rid of the default values here
     def __init__(self, name, value=0, prof=False):
         self.name = name
-        self.value = value
-        self.prof = prof
+        self._value = value
+        self._prof = prof
         self._skills = []
 
         self._set_skills()
@@ -270,13 +231,40 @@ class Stat:
     def __repr__(self):
         return f'Stat {self.name} value {self.value}.'
 
-    def set_value(self, value):
+    @property
+    def prof(self):
         """
-        Try to set the value if it cant error out.
+        Returns stat proficiency
+        @return: Bool
+        """
+        return self._prof
+
+    @prof.setter
+    def prof(self, value):
+        """
+        Sets proficiency
+        @param value: Bool
+        @return:
+        """
+        self._prof = value
+
+    @property
+    def value(self):
+        """
+        Returns stat value
+        @return: Int
+        """
+        return self._value
+
+    @value.setter
+    def value(self, value):
+        """
+        Sets the value
         @param value: Int
+        @return:
         """
         try:
-            self.value = int(value)
+            self._value = int(value)
         except ValueError as e:
             logger.error(f'{value} can not be converted into an int.')
 
@@ -321,7 +309,7 @@ class Stat:
 
     def save(self, root):
         # save out stat information
-        stat = et.SubElement(root, 'stats',  name=self.name, value=str(self.value), proficiency=str(self.prof))
+        stat = eT.SubElement(root, 'stats',  name=self.name, value=str(self.value), proficiency=str(self.prof))
 
         # goes through the stats and saves out each one associated to the class
         for s in self.skills.values():
@@ -332,8 +320,8 @@ class Skill:
     """Container for skills. Takes in the corresponding stat in order to return proper values."""
     def __init__(self, name, parent_stat):
         self.name = name
-        self.prof = False
-        self.expert = False
+        self._prof = False
+        self._expert = False
         self.parent_stat = parent_stat
 
     def __str__(self):
@@ -347,6 +335,40 @@ class Skill:
 
     def __repr__(self):
         return f'Stat {self.name} value {self.parent_stat.value}.'
+
+    @property
+    def prof(self):
+        """
+        Returns proficiency
+        @return:Bool
+        """
+        return self._prof
+
+    @prof.setter
+    def prof(self, value):
+        """
+        Sets proficiency
+        @param value:Bool
+        @return:
+        """
+        self._prof = value
+
+    @property
+    def expert(self):
+        """
+        Returns expert
+        @return: Bool
+        """
+        return self._expert
+
+    @expert.setter
+    def expert(self, value):
+        """
+        Sets the value of expert
+        @param value: Bool
+        @return:
+        """
+        self._expert = value
 
     # TODO: this function feels messy. Think of a cleaner way to get the skill modifier
     def get_modifier(self, prof_bonus, stat_modifier):
@@ -366,4 +388,47 @@ class Skill:
         print(self.parent_stat.value)
 
     def save(self, root):
-        et.SubElement(root, 'skills', name=self.name, proficiency=str(self.prof), expert=str(self.expert))
+        eT.SubElement(root, 'skills', name=self.name, proficiency=str(self.prof), expert=str(self.expert))
+
+
+def load_player(xml_file_path):
+    # Temp file name hardcoded for testing porpuse. Will need to be populated by code at some point
+    logger.debug('Loading xml file')
+    tree = eT.parse(xml_file_path)
+    root = tree.getroot()
+
+    player = Player()
+    # goes over base attributes and assigns them to class attribute
+    base_var = root.find('base')
+    player.name = base_var.get('name')
+    player.race = base_var.get('race')
+    player.level = int(base_var.get('level'))
+    player.health = int(base_var.get('health'))
+    player.temp_health = int(base_var.get('temp_health'))
+    player.background = base_var.get('background')
+
+    # goes over each chr_class item in the xml and sets the self.chr_class dict
+    # TODO: Gunna make character class its own class so this will need to change.
+    for chr_class in root.iter('chr_class'):
+        player.chr_class[chr_class.get('name')] = chr_class.get('level')
+
+    # goes over the stats section of the xml file and builds of the stat classes and adds them to the class var.
+    for stat in root.iter('stats'):
+        logger.debug('Testing stat loaders')
+        name = stat.get('name')
+        player_stat = player.get_stat_by_name(name)
+        player_stat.value = int(stat.get('value'))
+        player_stat.prof = str_to_bool(stat.get('proficiency'))
+
+        # for each stat goes over the skills and builds them out.
+        for skill in stat.iter('skills'):
+            logger.debug('Testing skill loaders')
+            player_skill = player_stat.get_skill_by_name(skill.get('name'))
+            player_skill.prof = str_to_bool(skill.get('proficiency'))
+            player_skill.expert = str_to_bool(skill.get('expert'))
+
+    # once class vars are set, stats set and skills set calls the functions that sets some other class var
+    self.prof_bonus = self.get_prof_bonus()
+    self.initiative = self.get_initiative()
+    return os.path.join(os.path.join(os.path.dirname(os.path.dirname(__file__)),
+                        '_docs', 'saves', 'Double Dragon_save_temp.xml'))
