@@ -48,6 +48,7 @@ class Player:
         self.background = None
         self._stats = [Stat('strength'), Stat('dexterity'), Stat('constitution'),
                        Stat('intelligence'), Stat('wisdom'), Stat('charisma')]
+        self.inventory = []
 
     def level_up(self, chr_class):
         # Check if level 0 if so call different function
@@ -127,8 +128,8 @@ class Player:
         """Returns what the initiative is based on dexterity"""
         logger.debug('Setting initiative')
         # TODO: Needs extra functions to search for feats or anything else that may change the initiative
-        return self.get_stat_by_name('dexterity').get_modifier()
-    
+        return self.get_stat_by_name('dexterity').modifier
+
     def get_prof_bonus(self):
         """Returns players proficiency bonus based on their level. If prof not set by end of for loop return 6"""
         logger.debug('Setting proficiency bonus')
@@ -148,9 +149,9 @@ class Player:
         else:
             # TODO: Add functionality to look for additives from items and spells
             if stat.prof:
-                return self.get_prof_bonus() + stat.get_modifier()
+                return self.get_prof_bonus() + stat.modifier
             else:
-                return stat.get_modifier()
+                return stat.modifier
     
     def get_spell_save_dc(self, stat_name):
         """
@@ -164,7 +165,7 @@ class Player:
             logger.warning(f'Could not find stat:{stat_name}')
             return None
         else:
-            return stat.get_modifier() + self.get_prof_bonus() + 8
+            return stat.modifier + self.get_prof_bonus() + 8
 
     @property
     def passive_perception(self):
@@ -278,8 +279,8 @@ class Stat:
         """
         try:
             self._value = int(value)
-        except ValueError as e:
-            logger.error(f'{value} can not be converted into an int.')
+        except ValueError:
+            logger.error(f' {value} can not be converted into an int.')
 
     @property
     def modifier(self):
