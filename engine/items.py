@@ -39,9 +39,11 @@ class Item:
 
 
 class WeaponBasic(Item):
-    def __init__(self, name, description):
-        super().__init__(self, name, description)
+    def __init__(self, name, item_type, description):
+        super().__init__(self, name, item_type, description)
         self.name = name
+        self.item_type = item_type
+        self.description = description
         self.prof = False
         self.attack_type = ''
         self.reach = 0
