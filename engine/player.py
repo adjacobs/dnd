@@ -94,7 +94,7 @@ class Player:
     def get_skill_by_name(self, skill_name):
         """Returns a list of all the player skill classes. By default returns a list of all skills.
         Can be filtered by associated stat.
-        @param skill: String
+        @param skill_name: String
         @return: skill object
         """
         logger.debug(f'Getting {skill_name}')

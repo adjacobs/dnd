@@ -23,12 +23,12 @@ def sort_santas_list(lop=None):
 
     @return:
     """
-    lop = [People('Alex', 'Jacobs', '1', 'alexdjacobs@gmail.com', '12/25/2021', None),
-           People('Alex', 'Gilbert', '2', 'angilbert.film@gmail.com', '12/25/2021', None),
-           People('Craig', 'Tynes', '3', 'CraigTynes@gmail.com', '12/25/2021', None),
-           People('Dom', 'Martin', '4', 'dom.wm.martin@gmail.com', '12/25/2021', None),
-           People('Eve', 'Cole', '5', 'coeeverett@gmail.com ', '12/25/2021', None),
-           People('Brook', 'Johnston', '6', 'react746@gmail.com ', '12/25/2021', None)]
+    lop = [People('Alex', 'Jacobs', '1', 'alexdjacobs@gmail.com', '12/25/2021', 'Brook'),
+           People('Alex', 'Gilbert', '2', 'angilbert.film@gmail.com', '12/25/2021', "Eve"),
+           People('Craig', 'Tynes', '3', 'CraigTynes@gmail.com', '12/25/2021', 'Alex Gilber'),
+           People('Dom', 'Martin', '4', 'dom.wm.martin@gmail.com', '12/25/2021', 'Craig'),
+           People('Eve', 'Cole', '5', 'coeeverett@gmail.com ', '12/25/2021', 'Alex Jacobs'),
+           People('Brook', 'Johnston', '6', 'react746@gmail.com ', '12/25/2021', 'Dom Martin')]
 
     lop2 = list(lop)
     random.shuffle(lop)
