@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07c4cbae-ba21-477b-b9cb-ceeab8813e8f" name="Changes" comment="Got rid of some errors. Still cleaning up old code. Added secret santa" />
+    <list default="true" id="07c4cbae-ba21-477b-b9cb-ceeab8813e8f" name="Changes" comment="First new branch" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,7 +45,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/_docs/class/fighter/features" />
-    <property name="settings.editor.selected.configurable" value="editing.templates" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -170,7 +170,14 @@
       <option name="project" value="LOCAL" />
       <updated>1640558649628</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="First new branch">
+      <created>1640558777819</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1640558777819</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -190,7 +197,8 @@
     <MESSAGE value="First pass on update to dnd player tool after being away for a year." />
     <MESSAGE value="Got rid of some errors. Still cleaning up old code." />
     <MESSAGE value="Got rid of some errors. Still cleaning up old code. Added secret santa" />
-    <option name="LAST_COMMIT_MESSAGE" value="Got rid of some errors. Still cleaning up old code. Added secret santa" />
+    <MESSAGE value="First new branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="First new branch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

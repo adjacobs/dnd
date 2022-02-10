@@ -4,7 +4,7 @@ Created on Apr 3, 2019
 @author: ajacobs
 '''
 import sys 
-from dnd.engine.player import Player
+from engine.player import Player
 from PySide2 import QtCore, QtGui, QtWidgets
 
 from dnd.ui_pyside.banner import Banner
