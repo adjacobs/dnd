@@ -4,14 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="07c4cbae-ba21-477b-b9cb-ceeab8813e8f" name="Changes" comment="Got rid of some errors. Still cleaning up old code. Added secret santa">
-      <change afterPath="$PROJECT_DIR$/_docs/class/fighter/features/second_wind.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/engine/character.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/player.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/player.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/secretSanta.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/secretSanta.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/engine/util.py" beforeDir="false" afterPath="$PROJECT_DIR$/engine/util.py" afterDir="false" />
-    </list>
+    <list default="true" id="07c4cbae-ba21-477b-b9cb-ceeab8813e8f" name="Changes" comment="First new branch" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -25,6 +18,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="podularAbilities" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -36,7 +34,9 @@
     </file-type-list>
   </component>
   <component name="ProjectId" id="20QJhLu0gUIcftvUiNaPygAZRjM" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -45,7 +45,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/_docs/class/fighter/features" />
-    <property name="settings.editor.selected.configurable" value="editing.templates" />
+    <property name="settings.editor.selected.configurable" value="org.jetbrains.plugins.github.ui.GithubSettingsConfigurable" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -156,7 +156,28 @@
       <option name="project" value="LOCAL" />
       <updated>1637608576278</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Got rid of some errors. Still cleaning up old code. Added secret santa">
+      <created>1640558326019</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1640558326019</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Got rid of some errors. Still cleaning up old code. Added secret santa">
+      <created>1640558649628</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1640558649628</updated>
+    </task>
+    <task id="LOCAL-00009" summary="First new branch">
+      <created>1640558777819</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1640558777819</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -176,7 +197,8 @@
     <MESSAGE value="First pass on update to dnd player tool after being away for a year." />
     <MESSAGE value="Got rid of some errors. Still cleaning up old code." />
     <MESSAGE value="Got rid of some errors. Still cleaning up old code. Added secret santa" />
-    <option name="LAST_COMMIT_MESSAGE" value="Got rid of some errors. Still cleaning up old code. Added secret santa" />
+    <MESSAGE value="First new branch" />
+    <option name="LAST_COMMIT_MESSAGE" value="First new branch" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -96,7 +96,6 @@ class ChrClass:
         pass
 
 
-
 class Fighter(ChrClass):
     def __init__(self):
         super(Fighter, self).__init__(cls_name='Fighter',
