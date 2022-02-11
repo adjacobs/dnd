@@ -5,18 +5,17 @@ import random
 # Only needed for access to command line arguments
 import sys
 import os
+import json
 os.environ['QT_MAC_WANTS_LAYER'] = '1'
+
+json_path = os.path.normpath(os.path.join(os.path.dirname(os.path.dirname(__file__)),'resources', 'questions.json'))
 
 
 class Questions:
     def __init__(self):
-        self.questions = ['Question 1',
-                          'Question 2',
-                          'Question 3',
-                          'Question 4',
-                          'Question 5',
-                          'Question 6']
-        self.question_count = 2
+        with open(json_path) as json_file:
+            self.questions = json.load(json_file)
+        self.question_count = 10
         self.answered_questions = []
 
     def next_question(self):
@@ -78,7 +77,7 @@ class QuestionsUI(QtWidgets.QMainWindow):
         # Add menu bar to Main Window
         self.setMenuBar(self.menu_bar)
 
-        # Build drop down item and connect to function
+        # Build dropdown item and connect to function
         self.drop_down_menu_item = QtWidgets.QAction(self)
         self.drop_down_menu_item.setObjectName("drop_down_menu_item")
 
@@ -109,8 +108,8 @@ class QuestionsUI(QtWidgets.QMainWindow):
 
     @staticmethod
     def quit_app():
-        # some actions to perform before actually quitting:
         app.exit()
+        pass
 
 # You need one (and only one) QApplication instance per application.
 # Pass in sys.argv to allow command line arguments for your app.
@@ -123,3 +122,5 @@ window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
 app.exec_()
+
+
