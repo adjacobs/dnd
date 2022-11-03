@@ -161,6 +161,6 @@ class Fighter(ChrClass):
             self.features(('Second Wind', details))
 
 
-if __name__ == "__main__":
-    chr_class = Fighter()
-    print(chr_class.second_wind(4, roll=True))
+#if __name__ == "__main__":
+#    chr_class = Fighter()
+#    print(chr_class.second_wind(4, roll=True))

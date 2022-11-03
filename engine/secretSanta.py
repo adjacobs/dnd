@@ -18,29 +18,22 @@ class People:
         return f'{self.name}'
 
 
-def sort_santas_list(lop=None):
+def sort_santas_list(santas_list=None):
     """
 
     @return:
     """
-    lop = [People('Alex', 'Jacobs', '1', 'alexdjacobs@gmail.com', '12/25/2021', 'Brook'),
-           People('Alex', 'Gilbert', '2', 'angilbert.film@gmail.com', '12/25/2021', "Eve"),
-           People('Craig', 'Tynes', '3', 'CraigTynes@gmail.com', '12/25/2021', 'Alex Gilber'),
-           People('Dom', 'Martin', '4', 'dom.wm.martin@gmail.com', '12/25/2021', 'Craig'),
-           People('Eve', 'Cole', '5', 'coeeverett@gmail.com ', '12/25/2021', 'Alex Jacobs'),
-           People('Brook', 'Johnston', '6', 'react746@gmail.com ', '12/25/2021', 'Dom Martin')]
+    checking_it_twice = list(santas_list)
+    random.shuffle(santas_list)
+    random.shuffle(checking_it_twice)
+    nice_list = list(zip(santas_list, checking_it_twice))
 
-    lop2 = list(lop)
-    random.shuffle(lop)
-    random.shuffle(lop2)
-    santas_list = zip(lop, lop2)
+    while not test_santas_list(nice_list):
+        random.shuffle(santas_list)
+        random.shuffle(checking_it_twice)
+        nice_list = list(zip(santas_list, checking_it_twice))
 
-    while not test_santas_list(santas_list):
-        random.shuffle(lop)
-        random.shuffle(lop2)
-        santas_list = list(zip(lop, lop2))
-
-    return santas_list
+    return nice_list
 
 
 def test_santas_list(santas_list):
@@ -72,10 +65,14 @@ def send_santas_list(santa, person, budget=None):
     message = f"""From: {santas_helper}\nTo: {santa.name}\nSubject: {subject}\n\n{msg}"""
 
     try:
+        print (1)
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.ehlo()
+        print(2)
         server.starttls()
+        print(server)
         server.login(santas_helper, password)
+        print(3)
         server.sendmail(santas_helper, santa.email, message)
         server.close()
         print(f'successfully sent the mail email to {santa.name}')
@@ -85,8 +82,20 @@ def send_santas_list(santa, person, budget=None):
 
 
 if __name__ == "__main__":
-    l = sort_santas_list()
-    if l:
-        for k, v in l:
-            print(f'Santa is {k.name}')
-            #send_santas_list(k, v)
+    santas_list = [People('Alex', 'Jacobs', '1', 'alexdjacobs@gmail.com', '12/25/2021', 'Brook'),
+                   People('Alex', 'Gilbert', '2', 'angilbert.film@gmail.com', '12/25/2021', "Eve"),
+                   People('Craig', 'Tynes', '3', 'CraigTynes@gmail.com', '12/25/2021', 'Alex Gilber'),
+                   People('Dom', 'Martin', '4', 'dom.wm.martin@gmail.com', '12/25/2021', 'Craig'),
+                   People('Eve', 'Cole', '5', 'coeeverett@gmail.com ', '12/25/2021', 'Alex Jacobs'),
+                   People('Brook', 'Johnston', '6', 'react746@gmail.com ', '12/25/2021', 'Dom Martin')]
+
+l = sort_santas_list(santas_list)
+print(l)
+if l:
+    print (l)
+    for santa, person in l:
+        print(f'{santa.name} is giving a gift to {person.name}')
+        if santa.name == 'Alex Jacobs':
+            print ('testing')
+            send_santas_list(santa, person)
+
